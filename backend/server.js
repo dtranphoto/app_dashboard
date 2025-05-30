@@ -3,6 +3,8 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+console.log("🚗 Demo ...");
+
 // ✅ Vehicle API route (dynamic)
 app.get('/api/vehicles', (req, res) => {
   console.log("🚗 Generating new vehicle data...");
