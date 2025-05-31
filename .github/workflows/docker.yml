@@ -31,9 +31,11 @@ jobs:
       #     context: .
       #     push: true
       #     tags: ${{ secrets.DOCKER_USERNAME }}/lucid-dashboard:latest
-      
+
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          region: us-west-2  
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
