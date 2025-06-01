@@ -17,6 +17,8 @@ jobs:
       ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
       ECR_REPOSITORY: dashboard
       IMAGE_TAG: latest
+      ECS_CLUSTER: lucid-dashboard-cluster
+      ECS_SERVICE: lucid-dashboard-service
 
     steps:
       - name: ⬇️ Checkout repository
@@ -40,17 +42,21 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: ⛏️ Set up Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: 🚀 Start ECS Service
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --desired-count 1 \
+            --region $AWS_REGION
 
-      - name: 📁 Terraform Init
-        run: terraform init
-        working-directory: terraform
+      # Optional: Run automated tests or health checks here
 
-      - name: 🔍 Terraform Plan
-        run: terraform plan
-        working-directory: terraform
-
-      - name: 🚀 Terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: terraform
+      - name: 🛑 Stop ECS Service (Scale to 0)
+        if: always()
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --desired-count 0 \
+            --region $AWS_REGION
