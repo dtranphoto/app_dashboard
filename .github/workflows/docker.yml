@@ -17,8 +17,8 @@ jobs:
       ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
       ECR_REPOSITORY: dashboard
       IMAGE_TAG: latest
-      ECS_CLUSTER: lucid-dashboard-cluster
-      ECS_SERVICE: lucid-dashboard-service
+      ECS_CLUSTER: dashboard-cluster
+      ECS_SERVICE: dashboard-task-service
 
     steps:
       - name: ⬇️ Checkout repository
