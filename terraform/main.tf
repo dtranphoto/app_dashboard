@@ -64,8 +64,16 @@ resource "aws_ecs_service" "lucid_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets         = var.subnet_ids
+    subnets          = var.subnet_ids
     assign_public_ip = true
-    security_groups = [var.security_group_id]
+    security_groups  = [var.security_group_id]
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.dashboard_tg.arn
+    container_name   = var.container_name       # Match this to what's in your task definition
+    container_port   = 3000
+  }
+
+  depends_on = [aws_lb_listener.http]
 }
