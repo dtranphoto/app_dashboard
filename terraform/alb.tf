@@ -7,6 +7,8 @@ resource "aws_lb" "dashboard_alb" {
 
   tags = {
     Name = "dashboard-alb"
+    autodelete  = "true"
+    environment = "dev"
   }
 }
 
@@ -26,6 +28,12 @@ resource "aws_lb_target_group" "dashboard_tg" {
   }
 
   target_type = "ip"
+
+  tags = {
+    Name        = "dashboard-tg"
+    autodelete  = "true"
+    environment = "dev"
+  }
 }
 
 resource "aws_lb_listener" "http" {
@@ -36,5 +44,11 @@ resource "aws_lb_listener" "http" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.dashboard_tg.arn
+  }
+
+  tags = {
+    Name        = "dashboard-http-listener"
+    autodelete  = "true"
+    environment = "dev"
   }
 }
