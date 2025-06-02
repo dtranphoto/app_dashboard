@@ -1,7 +1,7 @@
 {
-  "name": "lucid-dashboard-backend",
+  "name": "dashboard-backend",
   "version": "1.0.0",
-  "description": "Simple backend for Lucid CI/CD demo",
+  "description": "Simple backend for a CI/CD demo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
