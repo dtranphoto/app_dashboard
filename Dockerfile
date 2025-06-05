@@ -5,10 +5,10 @@ FROM node:18
 WORKDIR /app
 
 # Copy backend code
-COPY backend/ ./backend/
+COPY app/backend/ ./backend/
 
 # Copy frontend static files
-COPY frontend/ ./frontend/
+COPY app/frontend/ ./frontend/
 
 # Set working dir to backend for install
 WORKDIR /app/backend
