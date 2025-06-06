@@ -17,10 +17,9 @@ jobs:
       ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
       DASHBOARD_REPO: dashboard
       PROMETHEUS_REPO: prometheus
+      ALERTMANAGER_REPO: alertmanager
       IMAGE_TAG: latest
       ECS_CLUSTER: dashboard-cluster
-      DASHBOARD_SERVICE: dashboard-task-service
-      PROMETHEUS_SERVICE: prometheus-service
 
     steps:
       - name: ⬇️ Checkout repository
@@ -48,6 +47,11 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG -f Dockerfile.prometheus .
           docker push $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG
+
+      - name: 🏗️ Build & Push AlertManager Image to ECR
+        run: |
+          docker build -t $ECR_REGISTRY/$ALERTMANAGER_REPO:$IMAGE_TAG -f Dockerfile.alertmanager .
+          docker push $ECR_REGISTRY/$ALERTMANAGER_REPO:$IMAGE_TAG
 
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
