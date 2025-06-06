@@ -46,7 +46,7 @@ jobs:
 
       - name: 🏗️ Build & Push Prometheus Image to ECR
         run: |
-          docker build -t $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG ./monitoring
+          docker build -t $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG -f Dockerfile.prometheus .
           docker push $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG
 
       # - name: 📦 Set up Terraform
