@@ -1,4 +1,4 @@
-name: Build & Deploy Dashboard
+name: Build & Deploy Dashboard + Prometheus
 
 on:
   push:
@@ -15,10 +15,12 @@ jobs:
     env:
       AWS_REGION: us-west-2
       ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
-      ECR_REPOSITORY: dashboard
+      DASHBOARD_REPO: dashboard
+      PROMETHEUS_REPO: prometheus
       IMAGE_TAG: latest
       ECS_CLUSTER: dashboard-cluster
-      ECS_SERVICE: dashboard-task-service
+      DASHBOARD_SERVICE: dashboard-task-service
+      PROMETHEUS_SERVICE: prometheus-service
 
     steps:
       - name: ⬇️ Checkout repository
@@ -37,10 +39,15 @@ jobs:
       - name: 🔐 Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: 🏗️ Build and Push Docker image to ECR
+      - name: 🏗️ Build & Push Dashboard Image to ECR
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG
+
+      - name: 🏗️ Build & Push Prometheus Image to ECR
+        run: |
+          docker build -t $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG ./monitoring
+          docker push $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG
 
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
@@ -51,15 +58,21 @@ jobs:
       #     terraform apply -auto-approve
       #   working-directory: ./terraform
 
-      # - name: 🚀 Start ECS Service
+      # - name: 🚀 Start ECS Dashboard Service
       #   run: |
       #     aws ecs update-service \
       #       --cluster $ECS_CLUSTER \
-      #       --service $ECS_SERVICE \
+      #       --service $DASHBOARD_SERVICE \
       #       --desired-count 1 \
       #       --region $AWS_REGION
 
-      # # Optional: Run automated tests or health checks here
+      # - name: 🚀 Start ECS Prometheus Service
+      #   run: |
+      #     aws ecs update-service \
+      #       --cluster $ECS_CLUSTER \
+      #       --service $PROMETHEUS_SERVICE \
+      #       --desired-count 1 \
+      #       --region $AWS_REGION
 
       # - name: ⏱️ Wait 30 minutes before teardown
       #   run: sleep 1800
@@ -72,14 +85,20 @@ jobs:
       #     terraform apply -auto-approve -target=aws_lb_target_group.dashboard_tg -destroy
       #   working-directory: ./terraform
 
-      # - name: 🛑 Stop ECS Service (Scale to 0)
+      # - name: 🛑 Stop ECS Services (Scale to 0)
       #   if: always()
       #   run: |
       #     aws ecs update-service \
       #       --cluster $ECS_CLUSTER \
-      #       --service $ECS_SERVICE \
+      #       --service $DASHBOARD_SERVICE \
+      #       --desired-count 0 \
+      #       --region $AWS_REGION
+
+      #     aws ecs update-service \
+      #       --cluster $ECS_CLUSTER \
+      #       --service $PROMETHEUS_SERVICE \
       #       --desired-count 0 \
       #       --region $AWS_REGION
 
       # - name: ✅ Confirm teardown
-      #   run: echo "ALB and target group resources shut down to save cost."
+      #   run: echo "ALB and ECS services shut down to save cost."

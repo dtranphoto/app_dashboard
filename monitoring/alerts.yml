@@ -1,0 +1,11 @@
+groups:
+  - name: app-down-alert
+    rules:
+      - alert: AppDown
+        expr: up{job="dashboard-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "App is down"
+          description: "The dashboard-app has been down for more than 1 minute."
