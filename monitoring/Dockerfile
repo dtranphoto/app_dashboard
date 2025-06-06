@@ -1,23 +1,18 @@
-# Use Node.js base image
-FROM node:18
+FROM prom/prometheus:latest
 
-# Set working directory
-WORKDIR /app
+# Create config directory in container
+USER root
+RUN mkdir -p /etc/prometheus
 
-# Copy backend code
-COPY app/backend/ ./backend/
+# Copy Prometheus configuration files into the container
+COPY monitoring/prometheus.yml /etc/prometheus/prometheus.yml
+COPY monitoring/alerts.yml /etc/prometheus/alerts.yml
 
-# Copy frontend static files
-COPY app/frontend/ ./frontend/
+# Set the working directory
+WORKDIR /etc/prometheus
 
-# Set working dir to backend for install
-WORKDIR /app/backend
+# Expose Prometheus port
+EXPOSE 9090
 
-# Install dependencies
-RUN npm install
-
-# Expose the backend port
-EXPOSE 3000
-
-# Start the backend (which also serves frontend)
-CMD ["npm", "run", "dev"]
+# Start Prometheus with explicit config path
+CMD ["--config.file=/etc/prometheus/prometheus.yml", "--web.route-prefix=/prometheus", "--web.external-url=/prometheus"]
