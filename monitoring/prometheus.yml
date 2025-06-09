@@ -13,4 +13,4 @@ rule_files:
 scrape_configs:
   - job_name: 'dashboard-app'
     static_configs:
-      - targets: ['app:3000']]
+      - targets: ['app:3000']
