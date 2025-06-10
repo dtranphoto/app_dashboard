@@ -18,6 +18,7 @@ jobs:
       DASHBOARD_REPO: dashboard
       PROMETHEUS_REPO: prometheus
       ALERTMANAGER_REPO: alertmanager
+      GRAFANA_REPO: grafana
       IMAGE_TAG: latest
       ECS_CLUSTER: dashboard-cluster
 
@@ -52,6 +53,11 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ALERTMANAGER_REPO:$IMAGE_TAG -f Dockerfile.alertmanager .
           docker push $ECR_REGISTRY/$ALERTMANAGER_REPO:$IMAGE_TAG
+
+      - name: 🏗️ Build & Push Grafana Image to ECR
+        run: |
+          docker build -t $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG -f Dockerfile.grafana .
+          docker push $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG
 
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2

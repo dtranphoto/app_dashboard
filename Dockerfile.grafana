@@ -1,0 +1,14 @@
+FROM grafana/grafana:latest
+
+# Switch to root to copy files
+USER root
+
+# Copy your dashboards and provisioning configs into the image
+COPY grafana/dashboards /etc/grafana/dashboards
+COPY grafana/provisioning /etc/grafana/provisioning
+
+# Set correct ownership and permissions
+RUN chown -R 472:472 /etc/grafana/dashboards /etc/grafana/provisioning
+
+# Revert to Grafana user
+USER 472
