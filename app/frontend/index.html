@@ -21,6 +21,22 @@
       display: block;
     }
 
+    .button {
+      display: inline-block;
+      margin: 1rem auto 2rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #a30000;
+    }
+
     h1 {
       color: #cc0000;
       font-size: 2.5rem;
@@ -76,6 +92,10 @@
   <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Tesla_logo.png" alt="Tesla Logo" class="logo" />
 
   <h1>🚘 Tesla Fleet Monitor</h1>
+
+  <a class="button" href="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana/d/4083ea96-483f-4e5b-9cea-4d0d068de37f/app-monitoring-dashboard?orgId=1&from=now-6h&to=now&timezone=browser" target="_blank">
+    📊 View App Monitoring Dashboard
+  </a>
 
   <table>
     <thead>
