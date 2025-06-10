@@ -1,17 +1,23 @@
-# Base image from official Alertmanager
-FROM prom/alertmanager:latest
+# --- Stage 1: get the alertmanager binary ---
+FROM prom/alertmanager:latest AS source
 
-# Create directory if it doesn't exist
+# --- Stage 2: build a curl-enabled image ---
+FROM debian:bookworm-slim
+
+# Install curl
+RUN apt-get update && apt-get install -y curl
+
+# Create config directory
 RUN mkdir -p /etc/alertmanager
 
-# Copy your custom configuration into the container
+# Copy alertmanager binary from source image
+COPY --from=source /bin/alertmanager /bin/alertmanager
+
+# Copy configuration
 COPY monitoring/alertmanager.yml /etc/alertmanager/alertmanager.yml
 
-# Set the working directory (optional)
 WORKDIR /etc/alertmanager
-
-# Expose ports (optional, but useful for documentation)
-# 9093 is the default web port, 9094 is for cluster communication
 EXPOSE 9093 9094
 
+ENTRYPOINT ["/bin/alertmanager"]
 CMD ["--config.file=/etc/alertmanager/alertmanager.yml", "--web.route-prefix=/alertmanager"]

@@ -1,18 +1,32 @@
-FROM prom/prometheus:latest
+# --- Stage 1: get the Prometheus binary and default assets ---
+FROM prom/prometheus:latest AS source
 
-# Create config directory in container
+# --- Stage 2: base image with curl installed ---
+FROM debian:bookworm-slim
+
 USER root
+
+# Install curl
+RUN apt-get update && apt-get install -y curl
+
+# Create Prometheus config directory
 RUN mkdir -p /etc/prometheus
 
-# Copy Prometheus configuration files into the container
+# Copy Prometheus binary and default assets from base image
+COPY --from=source /bin/prometheus /bin/prometheus
+COPY --from=source /usr/share/prometheus/console_libraries /usr/share/prometheus/console_libraries
+COPY --from=source /usr/share/prometheus/consoles /usr/share/prometheus/consoles
+
+# Copy your custom configuration files
 COPY monitoring/prometheus.yml /etc/prometheus/prometheus.yml
 COPY monitoring/alerts.yml /etc/prometheus/alerts.yml
 
-# Set the working directory
+# Set working directory
 WORKDIR /etc/prometheus
 
 # Expose Prometheus port
 EXPOSE 9090
 
-# Start Prometheus with explicit config path
+# Add entrypoint and command
+ENTRYPOINT ["/bin/prometheus"]
 CMD ["--config.file=/etc/prometheus/prometheus.yml", "--web.route-prefix=/prometheus", "--web.external-url=/prometheus"]
