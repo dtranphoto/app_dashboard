@@ -58,7 +58,7 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG -f Dockerfile.grafana .
           docker push $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG
-      
+
       - name: 🚀 Force ECS Deploy: Dashboard
         run: |
           aws ecs update-service \
