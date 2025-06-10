@@ -12,10 +12,8 @@ RUN apt-get update && apt-get install -y curl
 # Create Prometheus config directory
 RUN mkdir -p /etc/prometheus
 
-# Copy Prometheus binary and default assets from base image
+# Copy Prometheus binary 
 COPY --from=source /bin/prometheus /bin/prometheus
-COPY --from=source /usr/share/prometheus/console_libraries /usr/share/prometheus/console_libraries
-COPY --from=source /usr/share/prometheus/consoles /usr/share/prometheus/consoles
 
 # Copy your custom configuration files
 COPY monitoring/prometheus.yml /etc/prometheus/prometheus.yml
