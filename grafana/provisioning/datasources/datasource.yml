@@ -4,13 +4,13 @@ datasources:
   - name: Prometheus
     type: prometheus
     access: proxy
-    url: http://prometheus:9090
+    url: ${GF_DATASOURCE_PROMETHEUS_URL}
     isDefault: true
 
   - name: Alertmanager
     type: alertmanager
     access: proxy
-    url: http://alertmanager:9093
+    url: ${GF_DATASOURCE_ALERTMANAGER_URL}
     isDefault: false
     jsonData:
       implementation: prometheus
