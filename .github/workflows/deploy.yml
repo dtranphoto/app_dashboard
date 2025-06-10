@@ -58,34 +58,19 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG -f Dockerfile.grafana .
           docker push $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG
-
+      
       - name: 🚀 Force ECS Deploy: Dashboard
-        run: |
-          aws ecs update-service \
-            --cluster $ECS_CLUSTER \
-            --service dashboard-service \
-            --force-new-deployment
+        run: aws ecs update-service --cluster $ECS_CLUSTER --service dashboard-service --force-new-deployment
 
       - name: 🚀 Force ECS Deploy: Prometheus
-        run: |
-          aws ecs update-service \
-            --cluster $ECS_CLUSTER \
-            --service prometheus-service \
-            --force-new-deployment
+        run: aws ecs update-service --cluster $ECS_CLUSTER --service prometheus-service --force-new-deployment
 
       - name: 🚀 Force ECS Deploy: AlertManager
-        run: |
-          aws ecs update-service \
-            --cluster $ECS_CLUSTER \
-            --service alertmanager-service \
-            --force-new-deployment
+        run: aws ecs update-service --cluster $ECS_CLUSTER --service alertmanager-service --force-new-deployment
 
       - name: 🚀 Force ECS Deploy: Grafana
-        run: |
-          aws ecs update-service \
-            --cluster $ECS_CLUSTER \
-            --service grafana-service \
-            --force-new-deployment
+        run: aws ecs update-service --cluster $ECS_CLUSTER --service grafana-service --force-new-deployment
+
 
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
