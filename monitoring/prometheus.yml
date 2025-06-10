@@ -12,5 +12,6 @@ rule_files:
 
 scrape_configs:
   - job_name: 'dashboard-app'
+    metrics_path: /metrics
     static_configs:
-      - targets: ['app:3000']
+      - targets: ['dashboard-alb-2077270126.us-west-2.elb.amazonaws.com:80']
