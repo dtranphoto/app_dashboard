@@ -3,7 +3,8 @@ global:
 
 alerting:
   alertmanagers:
-    - static_configs:
+    - path_prefix: /alertmanager
+      static_configs:
         - targets: ["dashboard-alb-2077270126.us-west-2.elb.amazonaws.com:80"]
 
 rule_files:
