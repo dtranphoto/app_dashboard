@@ -1,14 +1,28 @@
 
 services:
-  app:
-    build: .
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: dashboard-ui
     ports:
-      - "3000:3000"
+      - "5000:5000"
     volumes:
-      - ./app/backend:/app/backend
-      - ./app/frontend:/app/frontend
-    working_dir: /app/backend
-    command: npm run dev
+      - ./app/frontend/output:/app/output
+    restart: always
+    command: python3 app.py
+
+  mock-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock_api
+    container_name: mock-api
+    ports:
+      - "5001:5001"
+    command: python3 mock_service_api.py
+    volumes:
+      - ./app/frontend/services:/app/services
+    restart: always
 
   prometheus:
     image: prom/prometheus
@@ -20,7 +34,7 @@ services:
       - ./monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
       - prometheus_data:/prometheus
     depends_on:
-      - app
+      - mock-api
 
   grafana:
     image: grafana/grafana

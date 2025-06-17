@@ -1,0 +1,6 @@
+company_name: T-mobile
+logo_url: assets/t-mobile.png
+primary_color: "#e20074"
+page_title: "T-mobile Service Health Dashboard"
+header_text: "📶 T-Mobile Infra Monitor"
+dashboard_url: "https://grafana.tmobile.mock/grafana/d/infra"

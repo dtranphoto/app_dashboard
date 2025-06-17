@@ -1,0 +1,7 @@
+[
+  { "id": "membership-auth",       "region": "us-west-2" },
+  { "id": "inventory-tracker",     "region": "us-east-1" },
+  { "id": "wholesale-checkout",    "region": "us-west-1" },
+  { "id": "pharmacy-prescription", "region": "us-central-1" },
+  { "id": "delivery-scheduler",    "region": "us-east-2" }
+]

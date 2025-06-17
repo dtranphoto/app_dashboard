@@ -1,0 +1,8 @@
+[
+  { "id": "auth-service",           "region": "us-west-2" },
+  { "id": "cdn-cache",              "region": "us-east-1" },
+  { "id": "eshop-api",              "region": "us-west-2" },
+  { "id": "switch-cloud-sync",      "region": "us-west-1" },
+  { "id": "mario-kart-leaderboard", "region": "us-east-1" },
+  { "id": "zelda-save-backend",     "region": "us-west-2" }
+]
