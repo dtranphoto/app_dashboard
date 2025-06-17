@@ -1,0 +1,6 @@
+company_name: Tesla
+logo_url: assets/tesla.png
+primary_color: "#cc0000"
+page_title: "Tesla Service Health Dashboard"
+header_text: "⚙ Tesla Service Monitor"
+dashboard_url: "https://grafana.tesla.mock/grafana/d/tesla-sre"

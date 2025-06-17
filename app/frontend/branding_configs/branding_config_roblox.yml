@@ -1,0 +1,6 @@
+company_name: Roblox
+logo_url: assets/roblox.png
+primary_color: "#007acc"
+page_title: "Roblox Service Health Dashboard"
+header_text: "⚙ Roblox Service Monitor"
+dashboard_url: "https://grafana.roblox.mock/grafana/d/main"

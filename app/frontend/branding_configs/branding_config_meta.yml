@@ -1,0 +1,6 @@
+company_name: Meta
+logo_url: assets/meta.png 
+primary_color: "#1877f2"
+page_title: "Meta Service Health Dashboard"
+header_text: "⚙️ Meta Grid"
+dashboard_url: "https://grafana.meta.mock/grafana/d/meta-platform"

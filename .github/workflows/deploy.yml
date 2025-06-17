@@ -15,7 +15,8 @@ jobs:
     env:
       AWS_REGION: us-west-2
       ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
-      DASHBOARD_REPO: dashboard
+      DASHBOARD_REPO: dashboard-frontend
+      MOCK_API_REPO: mock-api
       PROMETHEUS_REPO: prometheus
       ALERTMANAGER_REPO: alertmanager
       GRAFANA_REPO: grafana
@@ -36,13 +37,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: 🔐 Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: 🏗️ Build & Push Dashboard Image to ECR
+      - name: 🏗️ Build & Push Dashboard Frontend
         run: |
-          docker build -t $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG -f Dockerfile.frontend .
           docker push $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG
+
+      - name: 🏗️ Build & Push Mock API
+        run: |
+          docker build -t $ECR_REGISTRY/$MOCK_API_REPO:$IMAGE_TAG -f Dockerfile.mock_api .
+          docker push $ECR_REGISTRY/$MOCK_API_REPO:$IMAGE_TAG
 
       - name: 🏗️ Build & Push Prometheus Image to ECR
         run: |
@@ -59,9 +62,10 @@ jobs:
           docker build -t $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG -f Dockerfile.grafana .
           docker push $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG
 
-      - name: 🚀 Force ECS Deploy
-        run: | 
+      - name: 🚀 Force ECS Deploys
+        run: |
           aws ecs update-service --cluster $ECS_CLUSTER --service dashboard-service --force-new-deployment
+          aws ecs update-service --cluster $ECS_CLUSTER --service mock-api-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service prometheus-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service alertmanager-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service grafana-service --force-new-deployment

@@ -1,0 +1,6 @@
+company_name: Costco
+logo_url: assets/costco.png
+primary_color: "#007acc"
+page_title: "Costco Service Health Dashboard"
+header_text: "⚙ Costco Service Monitor"
+dashboard_url: "https://grafana.costco.mock/grafana/d/main"

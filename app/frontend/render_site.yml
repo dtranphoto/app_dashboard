@@ -1,0 +1,51 @@
+- name: Render branded service health dashboard
+  hosts: localhost
+  gather_facts: false
+  vars:
+    company: "nintendo"  # override with -e company=xyz
+    output_dir: "./output/sites/{{ company }}"
+    branding_file: "./branding_configs/branding_config_{{ company }}.yml"
+    services_file: "./services/services_{{ company }}.json"
+
+  pre_tasks:
+    - name: Fail if branding config does not exist
+      stat:
+        path: "{{ branding_file }}"
+      register: branding_config_check
+
+    - name: Stop if branding config is missing
+      fail:
+        msg: "Branding config not found at {{ branding_file }}"
+      when: not branding_config_check.stat.exists
+
+    - name: Fail if services data file does not exist
+      stat:
+        path: "{{ services_file }}"
+      register: services_file_check
+
+    - name: Stop if services data file is missing
+      fail:
+        msg: "Services file not found at {{ services_file }}"
+      when: not services_file_check.stat.exists
+
+  vars_files:
+    - "{{ branding_file }}"
+
+  tasks:
+    - name: Ensure output directory exists and is writable
+      file:
+        path: "{{ output_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Render HTML template to output/sites/<company>/index.html
+      template:
+        src: "./templates/index.html.j2"
+        dest: "{{ output_dir }}/index.html"
+
+    - name: Copy mock services data into output folder
+      copy:
+        src: "{{ services_file }}"
+        dest: "{{ output_dir }}/services.json"
+
+
