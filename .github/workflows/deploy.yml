@@ -67,7 +67,7 @@ jobs:
 
       - name: 🚀 Force ECS Deploys
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service dashboard-service --force-new-deployment
+          aws ecs update-service --cluster $ECS_CLUSTER --service dashboard-frontend-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service mock-api-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service prometheus-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service alertmanager-service --force-new-deployment
