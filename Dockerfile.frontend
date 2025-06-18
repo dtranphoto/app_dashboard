@@ -5,6 +5,9 @@ WORKDIR /app
 
 COPY app/frontend /app
 
+# Copy the services directory
+COPY app/frontend/services /app/services
+
 # Install system packages + Flask + requests
 RUN apt-get update && apt-get install -y sshpass && \
     pip install --no-cache-dir flask requests && \
