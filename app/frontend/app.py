@@ -96,9 +96,15 @@ def serve_index(company):
 def proxy_services():
     company = request.args.get("company")
     try:
-        resp = requests.get(f"http://mock-api:5001/services.json?company={company}", timeout=3)
+        # Use ALB directly
+        resp = requests.get(
+            f"http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/api/services.json?company={company}",
+            timeout=3
+        )
         return jsonify(resp.json())
     except Exception as e:
+        import traceback
+        print("ERROR in /api/services:", traceback.format_exc())
         return jsonify({"error": "Unable to fetch service data", "details": str(e)}), 500
 
 @app.route("/health")
