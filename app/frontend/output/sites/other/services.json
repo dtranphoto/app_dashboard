@@ -1,6 +1,8 @@
 [
-  { "id": "auth-service",         "region": "us-west-2" },
-  { "id": "cdn-cache",            "region": "us-east-1" },
-  { "id": "eshop-api",            "region": "us-west-2" },
-  { "id": "user-profile-service", "region": "us-east-2" }
+  { "id": "edge-router",           "region": "us-west-1" },
+  { "id": "billing-engine",        "region": "us-east-1" },
+  { "id": "realtime-streamer",     "region": "us-central-1" },
+  { "id": "session-manager",       "region": "us-west-2" },
+  { "id": "metrics-collector",     "region": "us-east-2" },
+  { "id": "api-gateway-core",      "region": "us-west-2" }
 ]
