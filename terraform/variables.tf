@@ -57,3 +57,18 @@ variable "ecs_security_group_id" {
   description = "Security group ID for the ECS service"
   type        = string
 }
+
+variable "mock_api_name" {
+  description = "Name of the mock API app"
+  type        = string
+}
+
+variable "mock_api_container_port" {
+  description = "Container port mock API listens on"
+  type        = number
+}
+
+variable "mock_api_service_name" {
+  description = "Name of the ECS service for mock API"
+  type        = string
+}
