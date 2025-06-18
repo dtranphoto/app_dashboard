@@ -6,6 +6,9 @@ WORKDIR /app
 # Copy backend code
 COPY app/backend /app
 
+# Copy services directory into the container
+COPY app/frontend/services /app/services
+
 RUN pip install --no-cache-dir flask flask-cors
 
 EXPOSE 5001
