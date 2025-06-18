@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{{ page_title }}</title>
-  <link rel="icon" href="{{ logo_url }}" />
+  <title>Service Health Dashboard</title>
+  <link rel="icon" href="" />
   <style>
     body {
       background-color: #121212;
@@ -15,7 +15,7 @@
     }
 
     h1 {
-      color: {{ primary_color }};
+      color: #007acc;
       margin-top: 0.5rem;
     }
 
@@ -40,7 +40,7 @@
       margin: 1rem 0.5rem 2rem;
       padding: 0.6rem 1.2rem;
       font-size: 1rem;
-      background-color: {{ primary_color }};
+      background-color: #007acc;
       color: white;
       border: none;
       border-radius: 6px;
@@ -80,7 +80,7 @@
     }
 
     th {
-      background-color: {{ primary_color }};
+      background-color: #007acc;
       color: white;
       text-transform: uppercase;
     }
@@ -118,9 +118,9 @@
 </head>
 <body>
   <div class="logo-bar">
-  <img src="{{ logo_url }}" alt="{{ company_name }} Logo" class="logo" />
+  <img src="" alt="Other Logo" class="logo" />
   </div>
-  <h2 style="margin-bottom: 1rem; color: {{ primary_color }};">{{ header_text }}</h2>
+  <h2 style="margin-bottom: 1rem; color: #007acc;">⚙ Service Monitor</h2>
   <div style="margin: 0 auto 2rem; max-width: 1440px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4);">
     
     <table>
@@ -144,12 +144,12 @@
         <tr><td colspan="12">Loading service data...</td></tr>
       </tbody>
     </table>
-    <a class="button" href="{{ dashboard_url }}" target="_blank">📊 Grafana Monitoring Dashboard</a>
+    <a class="button" href="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana" target="_blank">📊 Grafana Monitoring Dashboard</a>
   </div>
 
   
 
-  <h2 style="margin-top: 3rem; color: {{ primary_color }};">🚀 Deployment Overview</h2>
+  <h2 style="margin-top: 3rem; color: #007acc;">🚀 Deployment Overview</h2>
   <div style="margin: 2rem auto; max-width: 900px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4); text-align: left;">
     <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1rem;">
   <!-- Logs Button -->
@@ -215,7 +215,7 @@
   </div>
 
   <script>
-    const company = "{{ company }}";
+    const company = "other";
     const tableBody = document.getElementById("service-table-body");
 
     function loadServiceData() {
