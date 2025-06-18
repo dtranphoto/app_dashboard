@@ -11,6 +11,7 @@ mkdir -p branding_configs services output/sites/$COMPANY/assets
 
 BRANDING_FILE="branding_configs/branding_config_${COMPANY}.yml"
 SERVICES_FILE="services/services_${COMPANY}.json"
+SVG_SOURCE="assets_svg/${COMPANY}.svg"
 MANUAL_PNG_SOURCE="assets/${COMPANY}.png"
 LOGO_PNG_PATH="output/sites/${COMPANY}/assets/${COMPANY}.png"
 
@@ -19,38 +20,37 @@ case "$COMPANY" in
   nintendo)
     COLOR="#e60012"
     HEADER="⚙ Mushroom Metrics"
-    DASHBOARD_URL="https://grafana.nintendo.mock/grafana/d/health"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
   tesla)
     COLOR="#cc0000"
     HEADER="⚙ Tesla Service Monitor"
-    DASHBOARD_URL="https://grafana.tesla.mock/grafana/d/tesla-sre"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
   blueorigin)
     COLOR="#005288"
     HEADER="🚀 BlueOrigin Service Monitor"
-    DASHBOARD_URL="https://grafana.blueorigin.mock/grafana/d/blueorigin-sre"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
   spacex)
     COLOR="#1b1f23"
     HEADER="🚀 SpaceX Control Panel"
-    DASHBOARD_URL="https://grafana.spacex.mock/grafana/d/spacex-monitoring"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
   t-mobile)
     COLOR="#e20074"
     HEADER="📶 T-Mobile Infra Monitor"
-    DASHBOARD_URL="https://grafana.tmobile.mock/grafana/d/infra"
-    LOGO_EPS_URL="https://www.brandsoftheworld.com/sites/all/themes/botw/img/s.gif"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
   meta)
     COLOR="#1877f2"
     HEADER="⚙ Meta Service Monitor"
-    DASHBOARD_URL="https://grafana.meta.mock/grafana/d/meta-platform"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
   *)
     COLOR="#007acc"
     HEADER="⚙ ${COMPANY^} Service Monitor"
-    DASHBOARD_URL="https://grafana.${COMPANY}.mock/grafana/d/main"
+    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
     ;;
 esac
 
