@@ -95,18 +95,18 @@ def serve_index(company):
 @app.route("/api/services")
 def proxy_services():
     company = request.args.get("company")
-    try:
-        # Use ALB directly
-        resp = requests.get(
-            f"http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/services.json?company={company}",
-            timeout=3
-        )
-        return jsonify(resp.json())
-    except Exception as e:
-        import traceback
-        print("ERROR in /api/services:", traceback.format_exc())
-        return jsonify({"error": "Unable to fetch service data", "details": str(e)}), 500
+    file_path = os.path.join("/app/services", f"{company}.json")
 
+    if not os.path.isfile(file_path):
+        return jsonify({"error": f"No service data for company: {company}"}), 404
+
+    try:
+        with open(file_path) as f:
+            data = json.load(f)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": "Unable to read service file", "details": str(e)}), 500
+    
 @app.route("/health")
 def health():
     return "OK", 200
