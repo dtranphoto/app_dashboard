@@ -5,9 +5,9 @@ WORKDIR /app
 
 COPY app/frontend /app
 
-# Install system packages + Flask + requests
+# Install system packages + Flask + requests + prometheus_client
 RUN apt-get update && apt-get install -y sshpass && \
-    pip install --no-cache-dir flask requests && \
+    pip install --no-cache-dir flask requests prometheus_client && \
     apt-get clean
 
 EXPOSE 5000
