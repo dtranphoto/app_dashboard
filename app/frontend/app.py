@@ -98,7 +98,7 @@ def proxy_services():
     try:
         # Use ALB directly
         resp = requests.get(
-            f"http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/api/services.json?company={company}",
+            f"http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/services.json?company={company}",
             timeout=3
         )
         return jsonify(resp.json())
