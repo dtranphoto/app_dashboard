@@ -73,14 +73,14 @@ jobs:
           aws ecs update-service --cluster $ECS_CLUSTER --service alertmanager-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service grafana-service --force-new-deployment
       
-      # - name: 📦 Set up Terraform
-      #   uses: hashicorp/setup-terraform@v2
+      - name: 📦 Set up Terraform
+        uses: hashicorp/setup-terraform@v2
 
-      # - name: ⛏️ Terraform Init & Apply
-      #   run: |
-      #     terraform init
-      #     terraform apply -auto-approve
-      #   working-directory: ./terraform
+      - name: ⛏️ Terraform Init & Apply
+        run: |
+          terraform init
+          terraform apply -auto-approve
+        working-directory: ./terraform
 
       # - name: 🚀 Start ECS Dashboard Service
       #   run: |
