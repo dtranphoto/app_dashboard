@@ -1,18 +1,31 @@
-from flask import Flask, request, redirect, render_template_string, send_from_directory, jsonify
+from flask import Flask, request, redirect, render_template_string, send_from_directory, jsonify, Response
 import requests
 import os
+import time
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST, Counter, Histogram
 
 app = Flask(__name__)
 
+# === Metrics Setup ===
+REQUEST_COUNT = Counter("request_count", "Total requests", ["method", "endpoint"])
+REQUEST_LATENCY = Histogram("request_latency_seconds", "Request latency", ["endpoint"])
+
+# === Paths ===
 BASE_DIR = os.path.dirname(__file__)
 SITES_DIR = os.path.join(BASE_DIR, "output", "sites")
 
+# === Routes ===
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    REQUEST_COUNT.labels(method=request.method, endpoint="/").inc()
+    start = time.time()
+
     companies = sorted(next(os.walk(SITES_DIR))[1]) if os.path.exists(SITES_DIR) else []
 
     if request.method == "POST":
         company = request.form["company"].lower()
+        REQUEST_LATENCY.labels(endpoint="/").observe(time.time() - start)
         return redirect(f"/sites/{company}/")
 
     html_template = """
@@ -82,21 +95,28 @@ def index():
     </body>
     </html>
     """
+    REQUEST_LATENCY.labels(endpoint="/").observe(time.time() - start)
     return render_template_string(html_template, companies=companies)
+
 
 @app.route("/sites/<company>/<path:filename>")
 def serve_static_file(company, filename):
+    REQUEST_COUNT.labels(method="GET", endpoint="/sites/<company>/<filename>").inc()
     return send_from_directory(os.path.join(SITES_DIR, company), filename)
+
 
 @app.route("/sites/<company>/")
 def serve_index(company):
+    REQUEST_COUNT.labels(method="GET", endpoint="/sites/<company>/").inc()
     return send_from_directory(os.path.join(SITES_DIR, company), "index.html")
+
 
 @app.route("/api/services")
 def proxy_services():
+    REQUEST_COUNT.labels(method="GET", endpoint="/api/services").inc()
+    start = time.time()
     company = request.args.get("company")
     try:
-        # Talk to mock-api through ALB
         resp = requests.get(
             f"http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/services.json?company={company}",
             timeout=3
@@ -104,11 +124,20 @@ def proxy_services():
         return jsonify(resp.json())
     except Exception as e:
         return jsonify({"error": "Unable to fetch service data", "details": str(e)}), 500
+    finally:
+        REQUEST_LATENCY.labels(endpoint="/api/services").observe(time.time() - start)
 
-    
+
+@app.route("/metrics")
+def metrics():
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
+
+
 @app.route("/health")
 def health():
     return "OK", 200
 
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
