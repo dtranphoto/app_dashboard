@@ -1,8 +1,8 @@
 [
-  { "id": "auth-service",           "region": "us-west-2" },
-  { "id": "billing-api",            "region": "us-east-1" },
-  { "id": "device-provisioning",    "region": "us-west-1" },
-  { "id": "network-diagnostics",    "region": "us-east-2" },
-  { "id": "5g-coverage-mapper",     "region": "us-central-1" },
-  { "id": "tvision-stream-engine",  "region": "us-west-2" }
+  { "id": "ai-auth-service",         "region": "us-west-2" },
+  { "id": "ai-billing-api",          "region": "us-east-1" },
+  { "id": "ai-device-provisioning",  "region": "us-west-2" },
+  { "id": "ai-network-diagnostics",  "region": "us-east-2" },
+  { "id": "ai-5g-mapping",           "region": "us-central-1" },
+  { "id": "ai-tvision-streamer",     "region": "us-west-2" }
 ]
