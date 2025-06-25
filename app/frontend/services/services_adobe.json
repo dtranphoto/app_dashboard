@@ -1,6 +1,9 @@
 [
-  { "id": "auth-service",         "region": "us-west-2" },
-  { "id": "cdn-cache",            "region": "us-east-1" },
-  { "id": "eshop-api",            "region": "us-west-2" },
-  { "id": "user-profile-service", "region": "us-east-2" }
+  { "id": "auth-service",               "region": "us-west-2" },
+  { "id": "photoshop-render-engine",    "region": "us-east-1" },
+  { "id": "creative-cloud-asset-store", "region": "us-west-2" },
+  { "id": "user-profile-sync",          "region": "us-east-2" },
+  { "id": "ml-model-inference-api",     "region": "us-central-1" },
+  { "id": "document-history-service",   "region": "us-west-1" },
+  { "id": "adobe-fonts-distribution",   "region": "us-east-1" }
 ]
