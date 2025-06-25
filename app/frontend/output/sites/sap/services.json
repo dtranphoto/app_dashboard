@@ -1,9 +1,0 @@
-[
-  { "id": "expense-ingestion-service",     "region": "us-west-2" },
-  { "id": "travel-booking-engine",         "region": "us-east-1" },
-  { "id": "invoice-processing-api",        "region": "us-west-1" },
-  { "id": "user-authentication-service",   "region": "us-east-2" },
-  { "id": "receipt-image-analyzer",        "region": "us-central-1" },
-  { "id": "compliance-audit-logger",       "region": "us-west-2" },
-  { "id": "report-generation-engine",      "region": "us-east-1" }
-]
