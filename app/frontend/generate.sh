@@ -82,7 +82,7 @@ fi
 if [ ! -f "$BRANDING_FILE" ]; then
   cat > "$BRANDING_FILE" <<EOF
 company_name: ${COMPANY^}
-logo_url: $LOGO_PATH
+logo_url: $MANUAL_PNG_SOURCE
 primary_color: "$COLOR"
 page_title: "${COMPANY^} Service Health Dashboard"
 header_text: "$HEADER"
