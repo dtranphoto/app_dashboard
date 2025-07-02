@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stacklok Agent Infrastructure Monitor</title>
+  <link rel="icon" href="assets/stacklok.png" />
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ea7b6c;
+      margin-top: 0.5rem;
+    }
+
+    .logo-bar {
+  width: 100%;
+  background-color: #121212; /* matches background */
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+    .logo {
+      max-height: 300px;
+      max-width: 900px;
+      width: auto;
+      object-fit: contain;
+     }
+
+    .button {
+      display: inline-block;
+      margin: 1rem 0.5rem 2rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      background-color: #ea7b6c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      opacity: 0.9;
+    }
+
+    .status {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #fff;
+      display: inline-block;
+    }
+
+    .Healthy  { background-color: #43a047; }
+    .Degraded { background-color: #fbc02d; }
+    .Down     { background-color: #e53935; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: #1e1e1e;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ea7b6c;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    tr:nth-child(even) {
+      background-color: #2c2c2c;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      td {
+        border-bottom: 1px solid #333;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        color: #999;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      th {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-bar">
+  <img src="assets/stacklok.png" alt="Stacklok Logo" class="logo" />
+  </div>
+  <h2 style="margin-bottom: 1rem; color: #ea7b6c;">🤖 Stacklok AgentOps Dashboard</h2>
+  <div style="margin: 0 auto 2rem; max-width: 1440px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4);">
+    
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Region</th>
+          <th>Status</th>
+          <th>Latency</th>
+          <th>Uptime</th>
+          <th>Errors</th>
+          <th>Instances</th>
+          <th>Restarts</th>
+          <th>Throughput</th>
+          <th>Version</th>
+          <th>Owner</th>
+          <th>Last Deploy</th>
+        </tr>
+      </thead>
+      <tbody id="service-table-body">
+        <tr><td colspan="12">Loading service data...</td></tr>
+      </tbody>
+    </table>
+    <a class="button" href="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana" target="_blank">📊 Grafana Monitoring Dashboard</a>
+  </div>
+
+  
+
+  <h2 style="margin-top: 3rem; color: #ea7b6c;">🚀 Deployment Overview</h2>
+  <div style="margin: 2rem auto; max-width: 900px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4); text-align: left;">
+    <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1rem;">
+  <!-- Logs Button -->
+  <button
+    onclick="window.open('https://github.com/dtranphoto/app_dashboard/actions/runs/15568635459', '_blank')"
+    style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">
+    Logs
+  </button>
+
+  <!-- Rollback Button -->
+  <button
+    onclick="alert('Rollback would revert to the previous stable version.\n(Not yet implemented)')"
+    style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">
+    Rollback
+  </button>
+
+  <!-- Trigger Manual Deploy Button -->
+  <button
+  style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;"
+  onclick="alert('Manual deploy triggered!\n(This is a placeholder. In production, this would trigger a GitHub Actions workflow_dispatch event via API call.)')"
+  >
+  Trigger Manual Deploy
+ </button>
+  </div>
+    <h3 style="color: white; margin-bottom: 0.5rem;">Build & Deploy Pipeline</h3>
+    <table style="width: 100%; color: #ddd; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 1px solid #333;">
+          <th style="text-align: left; padding: 0.5rem;">Status</th>
+          <th style="text-align: left; padding: 0.5rem;">Duration</th>
+          <th style="text-align: left; padding: 0.5rem;">Last Run</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding: 0.5rem;">🔧 build.yml</td><td>2 mins ✅</td><td>2 minutes ago</td></tr>
+        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">🚀 deploy-ecs.yml</td><td>1m 44s ✅</td><td>1 minute ago</td></tr>
+        <tr><td style="padding: 0.5rem;">📦 docker-push.yml</td><td>3 mins ✅</td><td>3 minutes ago</td></tr>
+        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">🧪 e2e-tests.yml</td><td>45s ⚠️</td><td>10 minutes ago</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size: 0.85rem; color: #aaa; margin-top: 0.5rem;">
+      Commit: <code>#4f1e3a4</code> &nbsp;|&nbsp; Branch: <code>main</code> &nbsp;|&nbsp;
+      <a href="https://github.com/dtranphoto/app_dashboard/actions/runs/15568635459" style="color: #339af0;" target="_blank">View Workflow Run</a>
+    </div>
+    <h3 style="color: white; margin: 2rem 0 0.5rem;">AWS Deployment Details</h3>
+    <table style="width: 100%; color: #ddd; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 1px solid #333;">
+          <th style="text-align: left; padding: 0.5rem;">Component</th>
+          <th style="text-align: left; padding: 0.5rem;">Status</th>
+          <th style="text-align: left; padding: 0.5rem;">Region</th>
+          <th style="text-align: left; padding: 0.5rem;">Last Update</th>
+          <th style="text-align: left; padding: 0.5rem;">Version</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding: 0.5rem;">ECS Service</td><td>✅ Running</td><td>us-west-2</td><td>2025-06-11 20:12 UTC</td><td>v2.0.1</td></tr>
+        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">ALB: dashboard</td><td>✅ Healthy</td><td>us-west-2</td><td>—</td><td>—</td></tr>
+        <tr><td style="padding: 0.5rem;">ECR Image: app</td><td>✅ Updated</td><td>us-west-2</td><td>2025-06-11 20:10 UTC</td><td>sha256:abc123…</td></tr>
+        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">S3 Bucket: static-site</td><td>✅ Synced</td><td>us-west-2</td><td>2025-06-11 20:05 UTC</td><td>build-240</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const company = "stacklok";
+    const tableBody = document.getElementById("service-table-body");
+
+    function loadServiceData() {
+      fetch(`/api/services?company=${company}`)
+        .then(res => res.json())
+        .then(services => {
+          tableBody.innerHTML = '';
+          services.forEach(service => {
+            const statusClass = service.status.replace(/\s/g, '');
+            const row = `
+              <tr>
+                <td data-label="ID">${service.id}</td>
+                <td data-label="Region">${service.region}</td>
+                <td data-label="Status"><span class="status ${statusClass}">${service.status}</span></td>
+                <td data-label="Latency">${service.latency_ms ?? '—'} ms</td>
+                <td data-label="Uptime">${service.uptime_percent.toFixed(2)}%</td>
+                <td data-label="Errors">${service.error_rate}%</td>
+                <td data-label="Instances">${service.instances}</td>
+                <td data-label="Restarts">${service.restarts}</td>
+                <td data-label="Throughput">${service.throughput_rps}</td>
+                <td data-label="Version">${service.version}</td>
+                <td data-label="Owner">${service.team_owner}</td>
+                <td data-label="Last Deploy">${service.last_deploy}</td>
+              </tr>`;
+            tableBody.innerHTML += row;
+          });
+        })
+        .catch(() => {
+          tableBody.innerHTML = `<tr><td colspan="12">Failed to load data</td></tr>`;
+        });
+    }
+
+    window.onload = () => {
+      loadServiceData();
+      setInterval(loadServiceData, 10000);
+    };
+  </script>
+</body>
+</html>
+
