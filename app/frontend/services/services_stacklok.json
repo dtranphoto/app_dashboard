@@ -1,6 +1,10 @@
 [
-  { "id": "auth-service",         "region": "us-west-2" },
-  { "id": "cdn-cache",            "region": "us-east-1" },
-  { "id": "eshop-api",            "region": "us-west-2" },
-  { "id": "user-profile-service", "region": "us-east-2" }
+  { "id": "toolhive-core",         "region": "us-west-2" },
+  { "id": "model-context-proxy",   "region": "us-west-2" },
+  { "id": "agent-router",          "region": "us-west-2" },
+  { "id": "telemetry-service",     "region": "us-east-1" },
+  { "id": "security-gateway",      "region": "us-east-2" },
+  { "id": "deployment-orchestrator", "region": "us-west-2" },
+  { "id": "slo-metrics-api",       "region": "us-east-1" },
+  { "id": "user-access-service",   "region": "us-east-2" }
 ]

@@ -115,17 +115,24 @@ def serve_index(company):
 def proxy_services():
     REQUEST_COUNT.labels(method="GET", endpoint="/api/services").inc()
     start = time.time()
-    company = request.args.get("company")
+
+    company = request.args.get("company", "nintendo").lower()
+    API_HOST = os.environ.get("API_HOST", "https://monitor.dtinfra.site")
+
+    # Try both /mock-api/services.json and /services.json (for fallback testing)
+    url = f"{API_HOST}/services.json?company={company}"
+    print(f"➡️ Fetching mock data from: {url}")
+
     try:
-        resp = requests.get(
-            f"http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/services.json?company={company}",
-            timeout=3
-        )
+        resp = requests.get(url, timeout=3)
+        resp.raise_for_status()  # Raise if HTTP error
         return jsonify(resp.json())
     except Exception as e:
+        print(f"❌ Error fetching mock data: {e}")
         return jsonify({"error": "Unable to fetch service data", "details": str(e)}), 500
     finally:
         REQUEST_LATENCY.labels(endpoint="/api/services").observe(time.time() - start)
+
 
 
 @app.route("/metrics")

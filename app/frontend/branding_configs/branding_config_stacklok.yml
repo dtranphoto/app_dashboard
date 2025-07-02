@@ -1,0 +1,6 @@
+company_name: Stacklok
+logo_url: assets/stacklok.png
+primary_color: "#ea7b6c"
+page_title: "Stacklok Agent Infrastructure Monitor"
+header_text: "🤖 Stacklok AgentOps Dashboard"
+dashboard_url: "http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
