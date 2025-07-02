@@ -72,3 +72,8 @@ variable "mock_api_service_name" {
   description = "Name of the ECS service for mock API"
   type        = string
 }
+
+variable "route53_zone_id" {
+  description = "Route 53 hosted zone ID for dtinfra.site"
+  type        = string
+}

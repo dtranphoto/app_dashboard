@@ -28,3 +28,5 @@ ecs_cluster_id     = "arn:aws:ecs:us-west-2:386503255039:cluster/dashboard-clust
 mock_api_name             = "mock-api"
 mock_api_container_port   = 5001
 mock_api_service_name     = "mock-api-service"
+
+route53_zone_id = "Z0719616382OQV1CGJE06"
