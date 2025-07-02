@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "grafana_task" {
   environment = [
     {
         name  = "GF_SERVER_ROOT_URL"
-        value = "%(protocol)s://%(domain)s/grafana"
+        value = "https://monitor.dtinfra.site/grafana"
       },
       {
         name  = "GF_SERVER_SERVE_FROM_SUB_PATH"
@@ -25,11 +25,11 @@ resource "aws_ecs_task_definition" "grafana_task" {
       },
       {
         name  = "GF_DATASOURCE_PROMETHEUS_URL"
-        value = "http://${aws_lb.dashboard_alb.dns_name}/prometheus"
+        value = "https://monitor.dtinfra.site/prometheus"
       },
       {
         name  = "GF_DATASOURCE_ALERTMANAGER_URL"
-        value = "http://${aws_lb.dashboard_alb.dns_name}/alertmanager"
+        value = "https://monitor.dtinfra.site/alertmanager"
       }
   ],
   logConfiguration = {
@@ -96,7 +96,7 @@ resource "aws_ecs_task_definition" "prometheus_task" {
     command = [
       "--web.listen-address=0.0.0.0:9090",
       "--web.route-prefix=/prometheus",
-      "--web.external-url=http://34.217.98.171:9090/prometheus"
+      "--web.external-url=https://monitor.dtinfra.site/prometheus"
     ],
     logConfiguration = {
       logDriver = "awslogs"

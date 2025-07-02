@@ -139,8 +139,13 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend_tg.arn
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 
   tags = {
@@ -150,9 +155,29 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.dashboard_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = "arn:aws:acm:us-west-2:386503255039:certificate/42c0ec1e-6870-49c4-8b8a-b0176b1d6782"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.frontend_tg.arn
+  }
+
+  tags = {
+    Name        = "dashboard-https-listener"
+    autodelete  = "true"
+    environment = "dev"
+  }
+}
+
+
 # Grafana path rule
 resource "aws_lb_listener_rule" "grafana_rule" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 20
 
   action {
@@ -169,7 +194,7 @@ resource "aws_lb_listener_rule" "grafana_rule" {
 
 # Prometheus path rule
 resource "aws_lb_listener_rule" "prometheus_rule" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 30
 
   action {
@@ -185,7 +210,7 @@ resource "aws_lb_listener_rule" "prometheus_rule" {
 }
 
 resource "aws_lb_listener_rule" "alertmanager_rule" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 40
 
   action {
@@ -202,7 +227,7 @@ resource "aws_lb_listener_rule" "alertmanager_rule" {
 
 # Route /services.json to mock-api
 resource "aws_lb_listener_rule" "mock_api_rule" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 15
 
   action {
