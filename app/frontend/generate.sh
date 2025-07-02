@@ -78,7 +78,7 @@ else
   exit 1
 fi
 
-# Write branding config
+# Only create branding config if it doesn't exist
 if [ ! -f "$BRANDING_FILE" ]; then
   cat > "$BRANDING_FILE" <<EOF
 company_name: ${COMPANY^}
@@ -89,6 +89,8 @@ header_text: "$HEADER"
 dashboard_url: "$DASHBOARD_URL"
 EOF
   echo "✅ Created $BRANDING_FILE"
+else
+  echo "📄 Existing branding config found. Skipping overwrite: $BRANDING_FILE"
 fi
 
 # Write services.json
@@ -104,6 +106,28 @@ EOF
   echo "✅ Created $SERVICES_FILE"
 fi
 
+# Remove old dashboard to force fresh render
+rm -f "output/sites/${COMPANY}/index.html"
+echo "🗑️ Removed old dashboard to force fresh render."
+
 # Run Ansible to render HTML
 echo "🚀 Rendering dashboard for ${COMPANY^}..."
 ansible-playbook render_site.yml -e company=$COMPANY
+
+# Define the dashboard path again just in case
+DASHBOARD_PATH="output/sites/${COMPANY}/index.html"
+
+# Show full path to open manually
+if [ -f "$DASHBOARD_PATH" ]; then
+  echo ""
+  echo "✅ Dashboard rendered successfully."
+
+  # Show Windows UNC path for browser use
+  if command -v wslpath &> /dev/null; then
+    UNC_PATH=$(wslpath -w "$DASHBOARD_PATH")
+    echo "📁 Open in Windows browser or Explorer:"
+    echo "   $UNC_PATH"
+  fi
+else
+  echo "❌ Dashboard not found at $DASHBOARD_PATH"
+fi
