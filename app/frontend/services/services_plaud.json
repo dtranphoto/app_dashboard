@@ -1,0 +1,11 @@
+[
+  { "id": "plaud-auth-service",         "region": "us-west-2" },
+  { "id": "plaud-cdn-cache",            "region": "us-east-1" },
+  { "id": "voice-to-text-service",      "region": "us-west-2" },
+  { "id": "user-profile-service",       "region": "us-east-2" },
+  { "id": "summary-orchestrator",       "region": "us-west-1" },
+  { "id": "speaker-detection-service",  "region": "us-east-2" },
+  { "id": "privacy-vault",              "region": "us-west-2" },
+  { "id": "export-gateway",             "region": "us-east-1" },
+  { "id": "ask-ai-service",             "region": "us-west-2" }
+]
