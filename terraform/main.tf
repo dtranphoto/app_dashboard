@@ -139,3 +139,15 @@ resource "aws_ecs_service" "frontend_service" {
 
   depends_on = [aws_lb_listener.http]
 }
+
+resource "aws_route53_record" "monitor_alias" {
+  zone_id = var.route53_zone_id                      
+  name    = "monitor.dtinfra.site"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.dashboard_alb.dns_name
+    zone_id                = aws_lb.dashboard_alb.zone_id
+    evaluate_target_health = true
+  }
+}

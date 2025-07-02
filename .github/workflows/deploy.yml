@@ -8,79 +8,134 @@ on:
     branches:
       - main
 
+env:
+  AWS_REGION: us-west-2
+  ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
+  IMAGE_TAG: latest
+
 jobs:
-  build-and-deploy:
+  setup:
     runs-on: ubuntu-latest
-
-    env:
-      AWS_REGION: us-west-2
-      ECR_REGISTRY: 386503255039.dkr.ecr.us-west-2.amazonaws.com
-      DASHBOARD_REPO: dashboard-frontend
-      MOCK_API_REPO: mock-api
-      PROMETHEUS_REPO: prometheus
-      ALERTMANAGER_REPO: alertmanager
-      GRAFANA_REPO: grafana
-      IMAGE_TAG: latest
-      ECS_CLUSTER: dashboard-cluster
-
+    outputs:
+      region: ${{ env.AWS_REGION }}
     steps:
-      - name: ⬇️ Checkout repository
-        uses: actions/checkout@v3
+      - name: 🧱 Set shared output
+        run: echo "Setup complete"
 
-      - name: 🐳 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: 🔐 Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+  dashboard:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: 🔐 Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-      
+      - uses: aws-actions/amazon-ecr-login@v2
       - name: 🏗️ Build & Push Dashboard Frontend
         run: |
-          docker build -t $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG -f Dockerfile.frontend .
-          docker push $ECR_REGISTRY/$DASHBOARD_REPO:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/dashboard-frontend:$IMAGE_TAG -f Dockerfile.frontend .
+          docker push $ECR_REGISTRY/dashboard-frontend:$IMAGE_TAG
 
+  mockapi:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
       - name: 🏗️ Build & Push Mock API
         run: |
-          docker build -t $ECR_REGISTRY/$MOCK_API_REPO:$IMAGE_TAG -f Dockerfile.mock_api .
-          docker push $ECR_REGISTRY/$MOCK_API_REPO:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/mock-api:$IMAGE_TAG -f Dockerfile.mock_api .
+          docker push $ECR_REGISTRY/mock-api:$IMAGE_TAG
 
-      - name: 🏗️ Build & Push Prometheus Image to ECR
+  prometheus:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+      - name: 🏗️ Build & Push Prometheus
         run: |
-          docker build -t $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG -f Dockerfile.prometheus .
-          docker push $ECR_REGISTRY/$PROMETHEUS_REPO:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/prometheus:$IMAGE_TAG -f Dockerfile.prometheus .
+          docker push $ECR_REGISTRY/prometheus:$IMAGE_TAG
 
-      - name: 🏗️ Build & Push AlertManager Image to ECR
+  alertmanager:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+      - name: 🏗️ Build & Push Alertmanager
         run: |
-          docker build -t $ECR_REGISTRY/$ALERTMANAGER_REPO:$IMAGE_TAG -f Dockerfile.alertmanager .
-          docker push $ECR_REGISTRY/$ALERTMANAGER_REPO:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/alertmanager:$IMAGE_TAG -f Dockerfile.alertmanager .
+          docker push $ECR_REGISTRY/alertmanager:$IMAGE_TAG
 
-      - name: 🏗️ Build & Push Grafana Image to ECR
+  grafana:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+      - name: 🏗️ Build & Push Grafana
         run: |
-          docker build -t $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG -f Dockerfile.grafana .
-          docker push $ECR_REGISTRY/$GRAFANA_REPO:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/grafana:$IMAGE_TAG -f Dockerfile.grafana .
+          docker push $ECR_REGISTRY/grafana:$IMAGE_TAG
 
-      - name: 🚀 Force ECS Deploys
+  deploy:
+    name: 🚀 Deploy to ECS
+    needs: [dashboard, mockapi, prometheus, alertmanager, grafana]
+    runs-on: ubuntu-latest
+    env:
+      ECS_CLUSTER: dashboard-cluster
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: 🔄 Force ECS Service Updates
         run: |
           aws ecs update-service --cluster $ECS_CLUSTER --service dashboard-frontend-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service mock-api-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service prometheus-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service alertmanager-service --force-new-deployment
           aws ecs update-service --cluster $ECS_CLUSTER --service grafana-service --force-new-deployment
-      
-      - name: 📦 Set up Terraform
-        uses: hashicorp/setup-terraform@v2
 
-      - name: ⛏️ Terraform Init & Apply
-        run: |
-          terraform init
-          terraform apply -auto-approve
-        working-directory: ./terraform
+      
+      # - name: 📦 Set up Terraform
+      #   uses: hashicorp/setup-terraform@v2
+
+      # - name: ⛏️ Terraform Init & Apply
+      #   run: |
+      #     terraform init
+      #     terraform apply -auto-approve
+      #   working-directory: ./terraform
 
       # - name: 🚀 Start ECS Dashboard Service
       #   run: |
