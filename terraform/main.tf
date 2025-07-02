@@ -109,7 +109,7 @@ resource "aws_ecs_task_definition" "frontend_task" {
 
   container_definitions = jsonencode([{
     name      = "dashboard-frontend"
-    image     = "386503255039.dkr.ecr.us-west-2.amazonaws.com/dashboard-frontend:latest"
+    image     = "${var.aws_account_id}.dkr.ecr.${var.region}.amazonaws.com/dashboard-frontend:latest"
     essential = true
     portMappings = [{
       containerPort = 5000
