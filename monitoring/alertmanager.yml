@@ -2,7 +2,11 @@ global:
   resolve_timeout: 5m
 
 route:
-  receiver: "log-only"
+  receiver: shutdown-webhook  # or use routing logic below
 
 receivers:
   - name: "log-only"
+
+  - name: shutdown-webhook
+    webhook_configs:
+      - url: http://your-api-host/api/stop
