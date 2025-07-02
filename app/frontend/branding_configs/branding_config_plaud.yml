@@ -1,0 +1,6 @@
+company_name: Plaud
+logo_url: assets/plaud.png
+primary_color: "#ffffff"
+page_title: "Plaud Service Health Dashboard"
+header_text: "⚙ PlaudOps Dashboard"
+dashboard_url: "http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
