@@ -2,6 +2,14 @@ output "ecr_repository_url" {
   value = aws_ecr_repository.dashboard.repository_url
 }
 
-output "prometheus_alb_dns" {
-  value = aws_lb.dashboard_alb.dns_name
+output "grafana_url" {
+  value = "https://monitor.dtinfra.site/grafana"
+}
+
+output "prometheus_url" {
+  value = "https://monitor.dtinfra.site/prometheus"
+}
+
+output "alertmanager_url" {
+  value = "https://monitor.dtinfra.site/alertmanager"
 }

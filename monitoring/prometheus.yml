@@ -17,3 +17,15 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["monitor.dtinfra.site"]
+
+groups:
+  - name: inactivity-rules
+    rules:
+    - alert: DashboardInactive
+      expr: rate(request_count{endpoint=~"/sites/.+"}[5m]) < 0.01
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Dashboard inactive"
+        description: "No requests to /sites/... in the last 5 minutes"
