@@ -9,3 +9,14 @@ groups:
         annotations:
           summary: "App is down"
           description: "The dashboard-app has been down for more than 1 minute."
+
+  - name: inactivity-rules
+    rules:
+      - alert: DashboardInactive
+        expr: rate(request_count_total{endpoint=~"/sites/.+"}[1m]) < 0.01
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Dashboard inactive"
+          description: "No traffic to any /sites/... page in the last 2 minutes."
