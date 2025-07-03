@@ -2,11 +2,15 @@ global:
   resolve_timeout: 5m
 
 route:
-  receiver: shutdown-webhook  # or use routing logic below
+  receiver: log-only
+  routes:
+    - match:
+        alertname: DashboardInactive
+      receiver: shutdown-webhook
 
 receivers:
-  - name: "log-only"
+  - name: log-only
 
   - name: shutdown-webhook
     webhook_configs:
-      - url: http://your-api-host/api/stop
+      - url: https://monitor.dtinfra.site/api/stop
