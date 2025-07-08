@@ -1,0 +1,10 @@
+[
+  { "id": "auth-service",               "region": "us-west-2" },
+  { "id": "cdn-cache",                  "region": "us-east-1" },
+  { "id": "eshop-api",                  "region": "us-west-2" },
+  { "id": "user-profile-service",       "region": "us-east-2" },
+  { "id": "vehicle-telematics",         "region": "us-west-1" },
+  { "id": "firmware-update-service",    "region": "us-west-1" },
+  { "id": "dreamdrive-orchestrator",    "region": "us-west-2" },
+  { "id": "lucid-vision-pipeline",      "region": "us-east-2" }
+]

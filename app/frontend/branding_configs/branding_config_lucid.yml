@@ -1,0 +1,6 @@
+company_name: Lucid
+logo_url: assets/lucid.png
+primary_color: "#d7be96"
+page_title: "LucidOps Health Dashboard"
+header_text: "⚙ LucidOps Service Monitor"
+dashboard_url: "https://monitor.dtinfra.site/grafana"

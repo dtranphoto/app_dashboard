@@ -20,37 +20,37 @@ case "$COMPANY" in
   nintendo)
     COLOR="#e60012"
     HEADER="⚙ Mushroom Metrics"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
   tesla)
     COLOR="#cc0000"
     HEADER="⚙ Tesla Service Monitor"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
   blueorigin)
     COLOR="#005288"
     HEADER="🚀 BlueOrigin Service Monitor"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
   spacex)
     COLOR="#1b1f23"
     HEADER="🚀 SpaceX Control Panel"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
   t-mobile)
     COLOR="#e20074"
     HEADER="📶 T-Mobile Infra Monitor"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
   meta)
     COLOR="#1877f2"
     HEADER="⚙ Meta Service Monitor"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
   *)
     COLOR="#007acc"
     HEADER="⚙ ${COMPANY^} Service Monitor"
-    DASHBOARD_URL="http://dashboard-alb-2077270126.us-west-2.elb.amazonaws.com/grafana"
+    DASHBOARD_URL="https://monitor.dtinfra.site/grafana"
     ;;
 esac
 
