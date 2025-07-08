@@ -14,3 +14,4 @@ terraform.tfvars
 
 # Crash logs
 crash.log
+k8s/minikube-linux-amd64
