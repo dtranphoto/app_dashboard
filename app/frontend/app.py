@@ -75,7 +75,7 @@ def shutdown_all():
     # Optionally confirm it's a DashboardInactive alert
     if any(alert.get("labels", {}).get("alertname") == "DashboardInactive" for alert in data["alerts"]):
         print("✅ Confirmed DashboardInactive alert — initiating shutdown.")
-        os.system("cd terraform && terraform destroy -auto-approve")
+        #os.system("cd terraform && terraform destroy -auto-approve")
         return "Shutdown initiated", 200
     else:
         print("⚠️ Received non-matching alert — ignoring.")

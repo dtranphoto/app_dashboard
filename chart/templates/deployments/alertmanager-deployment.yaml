@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.alertmanager.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.alertmanager.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.alertmanager.name }}
+    spec:
+      containers:
+        - name: {{ .Values.alertmanager.name }}
+          image: {{ .Values.alertmanager.image }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.alertmanager.containerPorts.web }}
+            - containerPort: {{ .Values.alertmanager.containerPorts.cluster }}
+

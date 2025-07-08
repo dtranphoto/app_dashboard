@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prometheus.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prometheus.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prometheus.name }}
+    spec:
+      containers:
+        - name: {{ .Values.prometheus.name }}
+          image: {{ .Values.prometheus.image }}
+          ports:
+            - containerPort: {{ .Values.prometheus.containerPort }}
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--web.route-prefix=/prometheus"
+            - "--web.external-url=/prometheus"

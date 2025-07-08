@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard-frontend
+  template:
+    metadata:
+      labels:
+        app: dashboard-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: app_dashboard-frontend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: API_URL
+              value: http://dashboard-api
+            - name: API_HOST
+              value: http://dashboard-api

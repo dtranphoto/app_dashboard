@@ -1,0 +1,59 @@
+replicaCount: 1
+
+image:
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-creds
+
+frontend:
+  name: dashboard-frontend
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/dashboard-frontend
+  containerPort: 5000
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 5000
+    nodePort: 30908
+
+api:
+  name: dashboard-api
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api
+  containerPort: 3000
+  service:
+    type: ClusterIP
+    port: 80
+
+prometheus:
+  name: prometheus
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/prometheus
+  containerPort: 9090
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 31700
+
+grafana:
+  name: grafana
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/grafana
+  containerPort: 3000
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 32000
+
+alertmanager:
+  name: alertmanager
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/alertmanager
+  containerPorts:
+    web: 9093
+    cluster: 9094
+  service:
+    type: NodePort
+    ports:
+      web: 80
+      cluster: 9094
+    nodePorts:
+      web: 30759
+      cluster: 30771
+

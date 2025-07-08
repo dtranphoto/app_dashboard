@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard-api
+  template:
+    metadata:
+      labels:
+        app: dashboard-api
+    spec:
+      containers:
+        - name: api
+          image: app_dashboard-mock-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5001

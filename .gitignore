@@ -1,0 +1,16 @@
+# .gitignore
+
+# Terraform working dir and caches
+.terraform/
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Sensitive / auto-generated files
+terraform.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+
+# Crash logs
+crash.log

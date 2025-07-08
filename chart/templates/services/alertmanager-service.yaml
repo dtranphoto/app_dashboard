@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.alertmanager.name }}
+spec:
+  selector:
+    app: {{ .Values.alertmanager.name }}
+  ports:
+    - name: web
+      port: {{ .Values.alertmanager.service.ports.web }}
+      targetPort: {{ .Values.alertmanager.containerPorts.web }}
+      nodePort: {{ .Values.alertmanager.service.nodePorts.web }}
+    - name: cluster
+      port: {{ .Values.alertmanager.service.ports.cluster }}
+      targetPort: {{ .Values.alertmanager.containerPorts.cluster }}
+      nodePort: {{ .Values.alertmanager.service.nodePorts.cluster }}
+  type: {{ .Values.alertmanager.service.type }}

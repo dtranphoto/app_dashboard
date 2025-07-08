@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-ingress
+  namespace: devops
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: k8.dtinfra.site
+      http:
+        paths:
+          - path: /grafana/
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 80
+          - path: /prometheus/
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  number: 80
+          - path: /alertmanager/
+            pathType: Prefix
+            backend:
+              service:
+                name: alertmanager
+                port:
+                  number: 80
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: dashboard-frontend
+                port:
+                  number: 80
+          - path: /frontend/
+            pathType: Prefix
+            backend:
+              service:
+                name: dashboard-frontend
+                port:
+                  number: 80
+          - path: /sites/
+            pathType: Prefix
+            backend:
+              service:
+                name: dashboard-frontend
+                port:
+                  number: 80
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: dashboard-frontend
+                port:
+                  number: 80
+
+
+
