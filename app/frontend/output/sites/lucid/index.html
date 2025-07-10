@@ -20,20 +20,20 @@
     }
 
     .logo-bar {
-  width: 100%;
-  background-color: #121212; /* matches background */
-  display: flex;
-  justify-content: center;
-  padding: 0;
-  margin-bottom: 2rem;
-}
+      width: 100%;
+      background-color: #121212;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin-bottom: 2rem;
+    }
 
     .logo {
       max-height: 300px;
       max-width: 900px;
       width: auto;
       object-fit: contain;
-     }
+    }
 
     .button {
       display: inline-block;
@@ -118,17 +118,16 @@
 </head>
 <body>
   <div class="logo-bar">
-  <img src="assets/lucid.png" alt="Lucid Logo" class="logo" />
+    <img src="assets/lucid.png" alt="Lucid Logo" class="logo" />
   </div>
   <h2 style="margin-bottom: 1rem; color: #d7be96;">⚙ LucidOps Service Monitor</h2>
   <div style="margin: 0 auto 2rem; max-width: 1440px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4);">
-    
     <table>
       <thead>
         <tr>
           <th>ID</th>
           <th>Region</th>
-          <th>Status</th>
+          <th>Step</th>
           <th>Latency</th>
           <th>Uptime</th>
           <th>Errors</th>
@@ -147,47 +146,104 @@
     <a class="button" href="https://monitor.dtinfra.site/grafana" target="_blank">📊 Grafana Monitoring Dashboard</a>
   </div>
 
-  
+  <!-- 🚨 Drift-aware OTA Update Section -->
+<h2 style="margin-top: 3rem; color: #d7be96;">📡 OTA Update Status</h2>
+<div style="margin: 2rem auto; max-width: 1000px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4);">
+  <h3 style="color: white;">🚧 Staging</h3>
+  <table style="width: 100%; color: #ddd; border-collapse: collapse; margin-bottom: 2rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid #333;">
+        <th>Model</th>
+        <th>Update Version</th>
+        <th>Rollout %</th>
+        <th>Status</th>
+        <th>Last Push</th>
+        <th>Promote</th>
+        <th>Drift</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background-color: #3c2c00;">
+        <td>Lucid Air Pure</td>
+        <td>v1.3.5-beta</td>
+        <td>35%</td>
+        <td>In Progress</td>
+        <td>2025-07-09</td>
+        <td></td>
+        <td><span style="color: #fbc02d;">⚠ Prod = v1.3.4</span></td>
+      </tr>
+      <tr style="background-color: #2c2c2c;">
+        <td>Lucid Air Touring</td>
+        <td>v1.3.5-beta</td>
+        <td>100%</td>
+        <td>Complete</td>
+        <td>2025-07-08</td>
+        <td><button style="background-color: #43a047; color: white; border: none; border-radius: 4px; padding: 0.3rem 0.6rem; cursor: pointer;" onclick="window.open('https://github.com/dtranphoto/app_dashboard/actions', '_blank')">Promote to Production</button></td>
+        <td><span style="color: #fbc02d;">⚠ Prod = v1.3.4</span></td>
+      </tr>
+      <tr>
+        <td>Lucid Gravity</td>
+        <td>v0.9.9-beta</td>
+        <td>15%</td>
+        <td>Staged</td>
+        <td>2025-07-07</td>
+        <td></td>
+        <td><span style="color: #fbc02d;">⚠ Prod = v0.9.8</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 style="color: white;">✅ Production</h3>
+<table style="width: 100%; color: #ddd; border-collapse: collapse;">
+  <thead>
+    <tr style="border-bottom: 1px solid #333;">
+      <th>Model</th>
+      <th>Update Version</th>
+      <th>Rollout %</th>
+      <th>Status</th>
+      <th>Last Push</th>
+    </tr>
+  </thead>
+  <tbody>
+        <tr><td>Lucid Air Pure</td><td>v1.3.4</td><td>100%</td><td>Complete</td><td>2025-07-01</td></tr>
+        <tr style="background-color: #2c2c2c;"><td>Lucid Air Touring</td><td>v1.3.4</td><td>100%</td><td>Complete</td><td>2025-06-30</td></tr>
+        <tr><td>Lucid Gravity</td><td>v0.9.8</td><td>90%</td><td>Rolling Out</td><td>2025-07-05</td></tr>
+      </tbody>
+    </table>
+  </div>
 
+  <!-- 🔧 Deployment Overview Section -->
   <h2 style="margin-top: 3rem; color: #d7be96;">🚀 Deployment Overview</h2>
   <div style="margin: 2rem auto; max-width: 900px; background: #1e1e1e; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.4); text-align: left;">
     <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1rem;">
-  <!-- Logs Button -->
-  <button
-    onclick="window.open('https://github.com/dtranphoto/app_dashboard/actions/runs/15568635459', '_blank')"
-    style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">
-    Logs
-  </button>
-
-  <!-- Rollback Button -->
-  <button
-    onclick="alert('Rollback would revert to the previous stable version.\n(Not yet implemented)')"
-    style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">
-    Rollback
-  </button>
-
-  <!-- Trigger Manual Deploy Button -->
-  <button
-  style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;"
-  onclick="alert('Manual deploy triggered!\n(This is a placeholder. In production, this would trigger a GitHub Actions workflow_dispatch event via API call.)')"
-  >
-  Trigger Manual Deploy
- </button>
-  </div>
-    <h3 style="color: white; margin-bottom: 0.5rem;">Build & Deploy Pipeline</h3>
+      <button onclick="window.open('https://github.com/dtranphoto/app_dashboard/actions/runs/15568635459', '_blank')" style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">Logs</button>
+      <button onclick="alert('Rollback would revert to the previous stable version.\n(Not yet implemented)')" style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">Rollback</button>
+      <button onclick="alert('Manual deploy triggered!\n(This is a placeholder. In production, this would trigger a GitHub Actions workflow_dispatch event via API call.)')" style="border: 1px solid #444; background: none; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; cursor: pointer;">Trigger Manual Deploy</button>
+    </div>
+    
+<h3 style="color: white; margin-bottom: 0.5rem;">Build & Deploy Pipeline</h3>
+<p style="color: #aaa; font-size: 0.95rem; margin-bottom: 1rem;">Target environment: <strong style="color: #fbc02d;">Staging</strong></p>
     <table style="width: 100%; color: #ddd; border-collapse: collapse;">
-      <thead>
-        <tr style="border-bottom: 1px solid #333;">
-          <th style="text-align: left; padding: 0.5rem;">Status</th>
-          <th style="text-align: left; padding: 0.5rem;">Duration</th>
-          <th style="text-align: left; padding: 0.5rem;">Last Run</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding: 0.5rem;">🔧 build.yml</td><td>2 mins ✅</td><td>2 minutes ago</td></tr>
-        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">🚀 deploy-ecs.yml</td><td>1m 44s ✅</td><td>1 minute ago</td></tr>
-        <tr><td style="padding: 0.5rem;">📦 docker-push.yml</td><td>3 mins ✅</td><td>3 minutes ago</td></tr>
-        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">🧪 e2e-tests.yml</td><td>45s ⚠️</td><td>10 minutes ago</td></tr>
+  <thead>
+    <tr style="border-bottom: 1px solid #333;">
+      <th>Step</th>
+      <th>Duration</th>
+      <th>Last Run</th>
+    </tr>
+  </thead>
+      <tr><td colspan="3" style="background-color: #333; color: #d7be96; text-align: left; font-weight: bold; padding: 1rem;">🛠️ Setup Phase</td></tr>
+<tr style="background-color: #2c2c2c;"><td>⬇️ checkout-repo</td><td>5s ✅</td><td>2 minutes ago</td></tr>
+<tr><td>🐳 setup-buildx</td><td>10s ✅</td><td>2 minutes ago</td></tr>
+<tr style="background-color: #2c2c2c;"><td>🔐 configure-aws</td><td>15s ✅</td><td>2 minutes ago</td></tr>
+<tr><td>🔑 login-ecr</td><td>8s ✅</td><td>2 minutes ago</td></tr>
+<tr><td colspan="3" style="background-color: #333; color: #d7be96; text-align: left; font-weight: bold; padding: 1rem;">📦 Build & Push Phase</td></tr>
+<tr style="background-color: #2c2c2c;"><td>📦 docker-push</td><td>1m 30s ✅</td><td>2 minutes ago</td></tr>
+<tr><td colspan="3" style="background-color: #333; color: #d7be96; text-align: left; font-weight: bold; padding: 1rem;">🚀 Deployment Phase</td></tr>
+<tr><td>🌍 terraform-setup</td><td>1m 45s ✅</td><td>2 minutes ago</td></tr>
+<tr style="background-color: #2c2c2c;"><td>☸️ deploy-eks</td><td>2m 10s ✅</td><td>1 minute ago</td></tr>
+<tr style="background-color: #2c2c2c;">
+
+<tr><td colspan="3" style="background-color: #333; color: #d7be96; text-align: left; font-weight: bold; padding: 1rem;">🧪 Validation Phase</td></tr>
+<tr style="background-color: #2c2c2c;"><td>🧪 e2e-tests</td><td>45s ⚠️</td><td>10 minutes ago</td></tr>
       </tbody>
     </table>
     <div style="font-size: 0.85rem; color: #aaa; margin-top: 0.5rem;">
@@ -198,18 +254,29 @@
     <table style="width: 100%; color: #ddd; border-collapse: collapse;">
       <thead>
         <tr style="border-bottom: 1px solid #333;">
-          <th style="text-align: left; padding: 0.5rem;">Component</th>
-          <th style="text-align: left; padding: 0.5rem;">Status</th>
-          <th style="text-align: left; padding: 0.5rem;">Region</th>
-          <th style="text-align: left; padding: 0.5rem;">Last Update</th>
-          <th style="text-align: left; padding: 0.5rem;">Version</th>
+          <th>Component</th>
+          <th>Status</th>
+          <th>Region</th>
+          <th>Last Update</th>
+          <th>Version</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td style="padding: 0.5rem;">ECS Service</td><td>✅ Running</td><td>us-west-2</td><td>2025-06-11 20:12 UTC</td><td>v2.0.1</td></tr>
-        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">ALB: dashboard</td><td>✅ Healthy</td><td>us-west-2</td><td>—</td><td>—</td></tr>
-        <tr><td style="padding: 0.5rem;">ECR Image: app</td><td>✅ Updated</td><td>us-west-2</td><td>2025-06-11 20:10 UTC</td><td>sha256:abc123…</td></tr>
-        <tr style="background-color: #2c2c2c;"><td style="padding: 0.5rem;">S3 Bucket: static-site</td><td>✅ Synced</td><td>us-west-2</td><td>2025-06-11 20:05 UTC</td><td>build-240</td></tr>
+      <tr><td>EKS Cluster</td><td>✅ Active</td><td>us-west-2</td><td>2025-07-10 07:55 UTC</td><td>eks-v1.29</td></tr>
+<tr style="background-color: #2c2c2c;"><td>K8s Ingress</td><td>✅ Healthy</td><td>us-west-2</td><td>2025-07-10 07:45 UTC</td><td>nginx-v1.9.3</td></tr>
+
+        
+        <tr><td>Helm Release: dashboard</td><td>✅ Synced</td><td>us-west-2</td><td>2025-07-10 08:20 UTC</td><td>chart-v0.4.1</td></tr>
+<tr style="background-color: #2c2c2c;"><td>CloudFront Distribution</td><td>✅ Active</td><td>us-west-2</td><td>2025-07-10 08:18 UTC</td><td>portal.dtinfra.site</td></tr>
+<tr><td>Route 53 DNS</td><td>✅ Resolving</td><td>us-west-2</td><td>2025-07-10 08:17 UTC</td><td>k8.dtinfra.site</td></tr>
+<tr style="background-color: #2c2c2c;"><td>IAM Role: eksService</td><td>✅ Attached</td><td>us-west-2</td><td>2025-07-10 08:16 UTC</td><td>OIDC enabled</td></tr>
+<tr><td colspan="5" style="background-color: #333; color: #d7be96; text-align: left; font-weight: bold; padding: 1rem;">ECR Images</td></tr>
+<tr><td>ECR Image: frontend</td><td>✅ Updated</td><td>us-west-2</td><td>2025-07-10 08:12 UTC</td><td>sha256:fe12a8…</td></tr>
+<tr style="background-color: #2c2c2c;"><td>ECR Image: backend</td><td>✅ Updated</td><td>us-west-2</td><td>2025-07-10 08:11 UTC</td><td>sha256:b7e21f…</td></tr>
+<tr><td>ECR Image: grafana</td><td>✅ Updated</td><td>us-west-2</td><td>2025-07-10 08:10 UTC</td><td>sha256:98cd32…</td></tr>
+<tr style="background-color: #2c2c2c;"><td>ECR Image: prometheus</td><td>✅ Updated</td><td>us-west-2</td><td>2025-07-10 08:09 UTC</td><td>sha256:772a11…</td></tr>
+<tr><td>ECR Image: mockapi</td><td>✅ Updated</td><td>us-west-2</td><td>2025-07-10 08:08 UTC</td><td>sha256:9df456…</td></tr>
+<tr style="background-color: #2c2c2c;"><td>ECR Image: car-ui</td><td>✅ Updated</td><td>us-west-2</td><td>2025-07-10 08:07 UTC</td><td>sha256:aa82dd…</td></tr>
+
       </tbody>
     </table>
   </div>
@@ -255,4 +322,3 @@
   </script>
 </body>
 </html>
-
