@@ -119,7 +119,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: ☸️ Set up kubectl context
-        run: aws eks update-kubeconfig --name dashboard-eks-cluster --region ${{ env.AWS_REGION }}
+        run: aws eks update-kubeconfig --name k8-devops-dashboard --region ${{ env.AWS_REGION }}
 
       - name: 🚀 Deploy Helm chart
         run: |
