@@ -112,14 +112,26 @@ jobs:
     needs: [dashboard, mockapi, prometheus, alertmanager, grafana]
     runs-on: ubuntu-latest
     steps:
-      - uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+      - name: 🔍 Show AWS Caller Identity
+        run: aws sts get-caller-identity
 
-      - name: ☸️ Set up kubectl context
+      - name: 🔍 List EKS clusters
+        run: aws eks list-clusters --region ${{ env.AWS_REGION }}
+
+      - name: ☸️ Set up kubeconfig
         run: aws eks update-kubeconfig --name k8-devops-dashboard --region ${{ env.AWS_REGION }}
+
+      - name: ☸️ Show current kubectl context
+        run: kubectl config current-context
+
+      - name: ☸️ Verify access to EKS
+        run: kubectl get nodes
+
+      - name: ☸️ List namespaces
+        run: kubectl get namespaces
+
+      - name: 🔍 Helm Dry Run
+        run: helm upgrade --install dashboard ./chart --namespace default --dry-run
 
       - name: 🚀 Deploy Helm chart
         run: |
@@ -127,7 +139,6 @@ jobs:
             --namespace default \
             --create-namespace \
             --wait
-            helm upgrade --install dashboard ./chart --namespace default --wait
 
       
       # - name: 📦 Set up Terraform
