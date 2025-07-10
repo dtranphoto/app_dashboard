@@ -10,6 +10,7 @@ frontend:
   name: dashboard-frontend
   image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/dashboard-frontend
   containerPort: 5000
+  apiHost: http://dashboard-api.staging.svc.cluster.local
   service:
     type: NodePort
     port: 80
@@ -18,8 +19,8 @@ frontend:
 
 api:
   name: dashboard-api
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api
-  containerPort: 3000
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api:v2
+  containerPort: 5001
   service:
     type: ClusterIP
     port: 80

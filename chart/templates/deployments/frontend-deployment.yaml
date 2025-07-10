@@ -21,3 +21,6 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.frontend.containerPort }}
+          env:
+            - name: API_HOST
+              value: {{ .Values.frontend.apiHost | quote }}

@@ -1,4 +1,4 @@
-name: Build & Deploy Dashboard + Prometheus
+name: Build & Deploy Dashboard (EKS)
 
 on:
   push:
@@ -108,24 +108,26 @@ jobs:
           docker push $ECR_REGISTRY/grafana:$IMAGE_TAG
 
   deploy:
-    name: 🚀 Deploy to ECS
+    name: ☸️ Deploy to EKS
     needs: [dashboard, mockapi, prometheus, alertmanager, grafana]
     runs-on: ubuntu-latest
-    env:
-      ECS_CLUSTER: dashboard-cluster
     steps:
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: 🔄 Force ECS Service Updates
+
+      - name: ☸️ Set up kubectl context
+        run: aws eks update-kubeconfig --name dashboard-eks-cluster --region ${{ env.AWS_REGION }}
+
+      - name: 🚀 Deploy Helm chart
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service dashboard-frontend-service --force-new-deployment
-          aws ecs update-service --cluster $ECS_CLUSTER --service mock-api-service --force-new-deployment
-          aws ecs update-service --cluster $ECS_CLUSTER --service prometheus-service --force-new-deployment
-          aws ecs update-service --cluster $ECS_CLUSTER --service alertmanager-service --force-new-deployment
-          aws ecs update-service --cluster $ECS_CLUSTER --service grafana-service --force-new-deployment
+          helm upgrade --install dashboard ./chart \
+            --namespace default \
+            --create-namespace \
+            --wait
+            helm upgrade --install dashboard ./chart --namespace default --wait
 
       
       # - name: 📦 Set up Terraform
