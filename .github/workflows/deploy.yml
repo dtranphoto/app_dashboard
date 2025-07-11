@@ -122,24 +122,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.DEPLOYER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: 🔍 Show AWS Caller Identity
-        run: aws sts get-caller-identity
-
-      - name: 🔍 List EKS clusters
-        run: aws eks list-clusters --region ${{ env.AWS_REGION }}
-
       - name: ☸️ Set up kubeconfig
         run: aws eks update-kubeconfig --name k8-devops-dashboard --region ${{ env.AWS_REGION }}
 
-      - name: ☸️ Show current kubectl context
-        run: kubectl config current-context
+      - name: ☸️ Install/Upgrade ingress-nginx (NLB)
+        run: |
+          helm upgrade --install ingress-nginx ingress-nginx \
+            --repo https://kubernetes.github.io/ingress-nginx \
+            --namespace ingress-nginx \
+            --create-namespace \
+            --set controller.service.type=LoadBalancer \
+            --set controller.service.externalTrafficPolicy=Local \
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"
 
-      - name: ☸️ Verify access to EKS
-        run: kubectl get nodes
-
-      - name: ☸️ List namespaces
-        run: kubectl get namespaces
-  
       - name: 🔍 Helm Dry Run
         run: helm upgrade --install dashboard ./chart --namespace staging --dry-run
 
@@ -149,7 +144,7 @@ jobs:
             --namespace staging \
             --create-namespace \
             --wait
-
+        
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
 
