@@ -112,6 +112,9 @@ jobs:
     needs: [dashboard, mockapi, prometheus, alertmanager, grafana]
     runs-on: ubuntu-latest
     steps:
+      - name: 🧾 Checkout repo
+        uses: actions/checkout@v3
+
       - name: 🛡️ Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -139,7 +142,6 @@ jobs:
   
       - name: 🔍 Helm Dry Run
         run: helm upgrade --install dashboard ./chart --namespace staging --dry-run
-        working-directory: ${{ github.workspace }}
 
       - name: 🚀 Deploy Helm chart
         run: |
@@ -147,9 +149,7 @@ jobs:
             --namespace staging \
             --create-namespace \
             --wait
-        working-directory: ${{ github.workspace }}
 
-      
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
 
