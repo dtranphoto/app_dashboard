@@ -136,21 +136,18 @@ jobs:
 
       - name: ☸️ List namespaces
         run: kubectl get namespaces
-      
-      - name: 🔍 Show working directory and files
-        run: |
-          pwd
-          ls -R
-
+  
       - name: 🔍 Helm Dry Run
-        run: helm upgrade --install dashboard ./chart --namespace default --dry-run
+        run: helm upgrade --install dashboard ./chart --namespace staging --dry-run
+        working-directory: ${{ github.workspace }}
 
       - name: 🚀 Deploy Helm chart
         run: |
           helm upgrade --install dashboard ./chart \
-            --namespace default \
+            --namespace staging \
             --create-namespace \
             --wait
+        working-directory: ${{ github.workspace }}
 
       
       # - name: 📦 Set up Terraform
