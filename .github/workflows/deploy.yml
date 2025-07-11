@@ -136,6 +136,11 @@ jobs:
 
       - name: ☸️ List namespaces
         run: kubectl get namespaces
+      
+      - name: 🔍 Show working directory and files
+        run: |
+          pwd
+          ls -R
 
       - name: 🔍 Helm Dry Run
         run: helm upgrade --install dashboard ./chart --namespace default --dry-run
