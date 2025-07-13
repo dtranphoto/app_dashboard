@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY firmware-server.py .
 COPY requirements.txt .
+COPY firmware/ ./firmware/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["python", "firmware-server.py"]
+
