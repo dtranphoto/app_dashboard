@@ -127,6 +127,8 @@ jobs:
   firmware-server:
     needs: setup
     runs-on: ubuntu-latest
+    outputs:
+      firmware_tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
@@ -138,12 +140,16 @@ jobs:
       - uses: aws-actions/amazon-ecr-login@v2
       - name: 🏗️ Build & Push Firmware Server
         run: |
-          docker build -t $ECR_REGISTRY/firmware-server:$IMAGE_TAG -f ./firmware-server/Dockerfile.server ./firmware-server
-          docker push $ECR_REGISTRY/firmware-server:$IMAGE_TAG
+          export FIRMWARE_TAG=firmware-v2-${{ github.sha }}
+          docker build -t $ECR_REGISTRY/firmware-server:$FIRMWARE_TAG -f ./firmware-server/Dockerfile.server ./firmware-server
+          docker push $ECR_REGISTRY/firmware-server:$FIRMWARE_TAG
+      - name: ✅ Set firmware image tag output
+        id: set_tag
+        run: echo "tag=firmware-v2-${{ github.sha }}" >> $GITHUB_OUTPUT
 
   deploy:
     name: ☸️ Deploy to EKS
-    needs: [dashboard, mockapi, prometheus, alertmanager, grafana]
+    needs: [dashboard, mockapi, prometheus, alertmanager, grafana, firmware-server]
     runs-on: ubuntu-latest
     steps:
       - name: 🧾 Checkout repo
@@ -159,6 +165,9 @@ jobs:
       - name: ☸️ Set up kubeconfig
         run: aws eks update-kubeconfig --name k8-devops-dashboard --region ${{ env.AWS_REGION }}
 
+      - name: 💾 Use firmware tag from build
+        run: echo "FIRMWARE_IMAGE_TAG=${{ needs.firmware-server.outputs.firmware_tag }}" >> $GITHUB_ENV
+
       - name: 🔍 Helm Dry Run
         run: helm upgrade --install dashboard ./chart --namespace staging --dry-run
 
@@ -167,6 +176,7 @@ jobs:
           helm upgrade --install dashboard ./chart \
             --namespace staging \
             --create-namespace \
+            --set firmwareServer.tag=${{ env.FIRMWARE_IMAGE_TAG }} \
             --wait
         
       # - name: 📦 Set up Terraform
