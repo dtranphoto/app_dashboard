@@ -127,25 +127,23 @@ jobs:
   firmware-server:
     needs: setup
     runs-on: ubuntu-latest
-    outputs:
-      firmware_tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
+
       - uses: docker/setup-buildx-action@v2
+
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
       - uses: aws-actions/amazon-ecr-login@v2
+
       - name: 🏗️ Build & Push Firmware Server
         run: |
-          export FIRMWARE_TAG=firmware-v2-${{ github.sha }}
-          docker build -t $ECR_REGISTRY/firmware-server:$FIRMWARE_TAG -f ./firmware-server/Dockerfile.server ./firmware-server
-          docker push $ECR_REGISTRY/firmware-server:$FIRMWARE_TAG
-      - name: ✅ Set firmware image tag output
-        id: set_tag
-        run: echo "tag=firmware-v2-${{ github.sha }}" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/firmware-server:firmware-v2-latest -f ./firmware-server/Dockerfile.server ./firmware-server
+          docker push $ECR_REGISTRY/firmware-server:firmware-v2-latest
 
   deploy:
     name: ☸️ Deploy to EKS
@@ -165,8 +163,8 @@ jobs:
       - name: ☸️ Set up kubeconfig
         run: aws eks update-kubeconfig --name k8-devops-dashboard --region ${{ env.AWS_REGION }}
 
-      - name: 💾 Use firmware tag from build
-        run: echo "FIRMWARE_IMAGE_TAG=${{ needs.firmware-server.outputs.firmware_tag }}" >> $GITHUB_ENV
+      - name: 💾 Set static firmware tag
+        run: echo "FIRMWARE_IMAGE_TAG=firmware-v2-latest" >> $GITHUB_ENV
 
       - name: 🔍 Helm Dry Run
         run: helm upgrade --install dashboard ./chart --namespace staging --dry-run
@@ -178,7 +176,10 @@ jobs:
             --create-namespace \
             --set firmwareServer.tag=${{ env.FIRMWARE_IMAGE_TAG }} \
             --wait
-        
+      
+      #- name: 📤 Push firmware after deploy
+      #  run: curl -X POST "http://k8.dtinfra.site/firmware/push?version=v2.0"
+            
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
 
