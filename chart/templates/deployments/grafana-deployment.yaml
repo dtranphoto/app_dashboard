@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: {{ .Values.grafana.name }}
-          image: {{ .Values.grafana.image }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}
+          imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.grafana.containerPort }}
           volumeMounts:
@@ -32,7 +32,3 @@ spec:
           configMap:
             name: grafana-config
 {{- end }}
-
-
-
-

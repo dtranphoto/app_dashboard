@@ -67,9 +67,12 @@ prometheus:
           regex: default;kubernetes;https
 
 grafana:
-  enabled: false
+  enabled: true
   name: grafana
-  image: grafana/grafana:latest
+  image:
+    repository: grafana/grafana
+    tag: latest
+    pullPolicy: IfNotPresent
   containerPort: 3000
   service:
     type: ClusterIP
