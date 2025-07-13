@@ -2,49 +2,57 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: devops-ingress
-  namespace: devops
+  namespace: staging
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /prometheus/-/healthy
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
   rules:
     - host: k8.dtinfra.site
       http:
         paths:
-          - path: /grafana/
+          - path: /grafana
             pathType: Prefix
             backend:
               service:
                 name: grafana
                 port:
                   number: 80
-          - path: /prometheus/
+          - path: /prometheus
             pathType: Prefix
             backend:
               service:
                 name: prometheus
                 port:
                   number: 80
-          - path: /alertmanager/
+          - path: /alertmanager
             pathType: Prefix
             backend:
               service:
                 name: alertmanager
                 port:
                   number: 80
-          - path: /api/
+          - path: /sites
             pathType: Prefix
             backend:
               service:
                 name: dashboard-frontend
                 port:
                   number: 80
-          - path: /frontend/
+          - path: /api
             pathType: Prefix
             backend:
               service:
                 name: dashboard-frontend
                 port:
                   number: 80
-          - path: /sites/
+          - path: /frontend
             pathType: Prefix
             backend:
               service:
@@ -58,6 +66,3 @@ spec:
                 name: dashboard-frontend
                 port:
                   number: 80
-
-
-

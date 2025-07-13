@@ -7,7 +7,8 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
 helm repo update
 
 helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-  --namespace ingress-nginx --create-namespace
+  --namespace ingress-nginx --create-namespace \
+  --set controller.publishService.enabled=true
 
 echo "⏳ Waiting for ingress controller EXTERNAL-IP..."
 sleep 10

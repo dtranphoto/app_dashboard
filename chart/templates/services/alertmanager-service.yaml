@@ -10,9 +10,15 @@ spec:
     - name: web
       port: {{ .Values.alertmanager.service.ports.web }}
       targetPort: {{ .Values.alertmanager.containerPorts.web }}
+      {{- if eq .Values.alertmanager.service.type "NodePort" }}
       nodePort: {{ .Values.alertmanager.service.nodePorts.web }}
+      {{- end }}
     - name: cluster
       port: {{ .Values.alertmanager.service.ports.cluster }}
       targetPort: {{ .Values.alertmanager.containerPorts.cluster }}
+      {{- if eq .Values.alertmanager.service.type "NodePort" }}
       nodePort: {{ .Values.alertmanager.service.nodePorts.cluster }}
+      {{- end }}
   type: {{ .Values.alertmanager.service.type }}
+
+

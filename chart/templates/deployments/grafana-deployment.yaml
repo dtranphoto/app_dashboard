@@ -22,7 +22,14 @@ spec:
             - name: grafana-config
               mountPath: /etc/grafana/grafana.ini
               subPath: grafana.ini
+          {{- if .Values.grafana.env }}
+          env:
+{{ toYaml .Values.grafana.env | indent 12 }}
+          {{- end }}
       volumes:
         - name: grafana-config
           configMap:
             name: grafana-config
+
+
+

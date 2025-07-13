@@ -10,38 +10,70 @@ frontend:
   name: dashboard-frontend
   image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/dashboard-frontend
   containerPort: 5000
-  apiHost: http://dashboard-api.staging.svc.cluster.local
   service:
-    type: NodePort
+    type: ClusterIP
     port: 80
     targetPort: 5000
-    nodePort: 30908
 
 api:
   name: dashboard-api
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api:v2
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api
   containerPort: 5001
   service:
     type: ClusterIP
     port: 80
+    targetPort: 5001
 
 prometheus:
   name: prometheus
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/prometheus
+  image: prom/prometheus:latest
   containerPort: 9090
   service:
-    type: NodePort
+    type: ClusterIP
     port: 80
-    nodePort: 31700
+    targetPort: 9090
+  extraScrapeConfigs: |
+    - job_name: 'node-exporter'
+      static_configs:
+        - targets: ['node-exporter.kube-system.svc.cluster.local:9100']
+
+    - job_name: 'kube-state-metrics'
+      static_configs:
+        - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8080']
+
+    - job_name: 'cadvisor'
+      kubernetes_sd_configs:
+        - role: node
+      scheme: https
+      tls_config:
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+        - source_labels: [__metrics_path__]
+          target_label: metrics_path
+        - source_labels: [__address__]
+          regex: (.+):10250
+          target_label: __address__
+          replacement: $1:10250
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+          action: keep
+          regex: default;kubernetes;https
 
 grafana:
   name: grafana
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/grafana
+  image: grafana/grafana:latest
   containerPort: 3000
   service:
-    type: NodePort
+    type: ClusterIP
     port: 80
-    nodePort: 32000
+    targetPort: 3000
 
 alertmanager:
   name: alertmanager
@@ -50,11 +82,7 @@ alertmanager:
     web: 9093
     cluster: 9094
   service:
-    type: NodePort
+    type: ClusterIP
     ports:
       web: 80
       cluster: 9094
-    nodePorts:
-      web: 30759
-      cluster: 30771
-

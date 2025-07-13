@@ -1,13 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.prometheus.name }}
-  namespace: {{ .Release.Namespace }}
+  name: prometheus
+  namespace: staging
+  labels:
+    app: prometheus
 spec:
   selector:
-    app: {{ .Values.prometheus.name }}
+    app: prometheus
   ports:
-    - port: {{ .Values.prometheus.service.port }}
-      targetPort: {{ .Values.prometheus.containerPort }}
-      nodePort: {{ .Values.prometheus.service.nodePort }}
-  type: {{ .Values.prometheus.service.type }}
+    - name: http
+      port: 80
+      targetPort: 9090
+  type: ClusterIP
+
+
