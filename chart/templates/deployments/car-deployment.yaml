@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.car.name }}
+spec:
+  replicas: {{ .Values.car.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.car.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.car.name }}
+    spec:
+      containers:
+        - name: {{ .Values.car.name }}
+          image: {{ .Values.car.image }}:{{ .Values.car.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.car.containerPort }}
+          env:
+            - name: FIRMWARE_VERSION
+              value: "{{ .Values.car.firmwareVersion }}"

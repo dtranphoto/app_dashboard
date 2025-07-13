@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.firmwareServer.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.firmwareServer.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.firmwareServer.name }}
+    spec:
+      serviceAccountName: {{ .Values.firmwareServer.name }}
+      containers:
+        - name: {{ .Values.firmwareServer.name }}
+          image: {{ .Values.firmwareServer.image }}:{{ .Values.firmwareServer.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.firmwareServer.containerPort }}

@@ -1,0 +1,12 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY car_sim.py .
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV FIRMWARE_VERSION=v1.0
+
+CMD ["python", "car_sim.py"]
