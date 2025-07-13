@@ -67,6 +67,7 @@ prometheus:
           regex: default;kubernetes;https
 
 grafana:
+  enabled: false
   name: grafana
   image: grafana/grafana:latest
   containerPort: 3000
