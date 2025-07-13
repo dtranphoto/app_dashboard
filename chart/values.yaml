@@ -1,14 +1,14 @@
 replicaCount: 1
 
 image:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 imagePullSecrets:
   - name: ecr-creds
 
 frontend:
   name: dashboard-frontend
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/dashboard-frontend
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/dashboard-frontend:latest
   containerPort: 5000
   service:
     type: ClusterIP
@@ -17,7 +17,7 @@ frontend:
 
 api:
   name: dashboard-api
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/mock-api:latest
   containerPort: 5001
   service:
     type: ClusterIP
