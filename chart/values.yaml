@@ -81,14 +81,14 @@ grafana:
 
 alertmanager:
   name: alertmanager
-  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/alertmanager
+  image: quay.io/prometheus/alertmanager:v0.28.0
   containerPorts:
     web: 9093
     cluster: 9094
   service:
     type: ClusterIP
     ports:
-      web: 80
+      web: 9093
       cluster: 9094
 
 car:
