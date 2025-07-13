@@ -121,7 +121,7 @@ jobs:
       - uses: aws-actions/amazon-ecr-login@v2
       - name: 🏗️ Build & Push Car Container
         run: |
-          docker build -t $ECR_REGISTRY/car:$IMAGE_TAG -f Dockerfile.car ./car-container
+          docker build -t $ECR_REGISTRY/car:$IMAGE_TAG -f ./car-container/Dockerfile.car ./car-container
           docker push $ECR_REGISTRY/car:$IMAGE_TAG
 
   firmware-server:
@@ -138,7 +138,7 @@ jobs:
       - uses: aws-actions/amazon-ecr-login@v2
       - name: 🏗️ Build & Push Firmware Server
         run: |
-          docker build -t $ECR_REGISTRY/firmware-server:$IMAGE_TAG -f Dockerfile.server ./firmware-server
+          docker build -t $ECR_REGISTRY/firmware-server:$IMAGE_TAG -f ./firmware-server/Dockerfile.server ./firmware-server
           docker push $ECR_REGISTRY/firmware-server:$IMAGE_TAG
 
   deploy:
