@@ -90,3 +90,20 @@ alertmanager:
     ports:
       web: 80
       cluster: 9094
+
+car:
+  name: car
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/car
+  tag: latest
+  containerPort: 8080
+  replicaCount: 3
+  firmwareVersion: "v1.0"
+
+firmwareServer:
+  name: firmware-server
+  image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/firmware-server
+  tag: latest
+  containerPort: 8090
+  service:
+    port: 80
+    targetPort: 8090
