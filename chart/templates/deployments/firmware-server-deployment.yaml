@@ -19,3 +19,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.firmwareServer.containerPort }}
+          volumeMounts:
+            - name: firmware-storage
+              mountPath: /app
+      volumes:
+        - name: firmware-storage
+          emptyDir: {}
+

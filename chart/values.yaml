@@ -102,8 +102,9 @@ car:
 firmwareServer:
   name: firmware-server
   image: 386503255039.dkr.ecr.us-west-2.amazonaws.com/firmware-server
-  tag: latest
+  tag: firmware-v2-latest
   containerPort: 8090
+  imagePullPolicy: Always
   service:
     port: 80
     targetPort: 8090

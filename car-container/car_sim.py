@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-# Start with the env var version
+FIRMWARE_PATH = "/app/firmware.bin"
 firmware_version = os.environ.get("FIRMWARE_VERSION", "v1.0")
 
 def run_bist_tests(version):
@@ -25,12 +25,21 @@ def status():
 @app.route("/update", methods=["POST"])
 def update():
     global firmware_version
-    new_version = request.args.get("version")
-    if not new_version:
-        return jsonify({"error": "No version specified"}), 400
 
-    firmware_version = new_version
-    return jsonify({"message": f"Firmware updated to {new_version}"}), 200
+    # Save binary firmware to file
+    try:
+        firmware_data = request.data
+        if not firmware_data:
+            return jsonify({"error": "No firmware binary received"}), 400
+
+        with open(FIRMWARE_PATH, "wb") as f:
+            f.write(firmware_data)
+
+        firmware_version = "v2.0"  # or parse from metadata later
+        return jsonify({"message": f"Firmware flashed to {firmware_version}"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
