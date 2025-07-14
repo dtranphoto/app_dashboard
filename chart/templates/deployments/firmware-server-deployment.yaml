@@ -21,7 +21,7 @@ spec:
             - containerPort: {{ .Values.firmwareServer.containerPort }}
           volumeMounts:
             - name: firmware-storage
-              mountPath: /app
+              mountPath: /app/data
       volumes:
         - name: firmware-storage
           emptyDir: {}

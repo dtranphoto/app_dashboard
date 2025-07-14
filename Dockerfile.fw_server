@@ -6,8 +6,10 @@ COPY firmware-server.py /app/firmware-server.py
 COPY requirements.txt /app/requirements.txt
 COPY firmware/ /app/firmware/
 
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN ls -la /app && pip install --no-cache-dir -r /app/requirements.txt
 
-CMD ["python", "/app/firmware-server.py"]
+CMD ["python", "firmware-server.py"]
+
+
 
 

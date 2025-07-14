@@ -142,7 +142,7 @@ jobs:
 
       - name: 🏗️ Build & Push Firmware Server
         run: |
-          docker build -t $ECR_REGISTRY/firmware-server:firmware-v2-latest -f ./firmware-server/Dockerfile.server ./firmware-server
+          docker build -t $ECR_REGISTRY/firmware-server:firmware-v2-latest -f Dockerfile.fw_server ./firmware-server
           docker push $ECR_REGISTRY/firmware-server:firmware-v2-latest
 
   deploy:
