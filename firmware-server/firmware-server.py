@@ -81,7 +81,7 @@ def verify_firmware():
     print("✅ [VERIFY] Done.\n")
     return jsonify(results)
 
-@app.route("/health", methods=["GET"])
+@app.route("/firmware/health", methods=["GET"])
 def health_check():
     return "OK", 200
 
