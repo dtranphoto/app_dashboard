@@ -82,8 +82,8 @@ def verify_firmware():
     print("✅ [VERIFY] Done.\n")
     return jsonify(results)
 
-@app.route("/firmware/health", methods=["GET"])
-def health_check():
+@app.route("/prometheus/-/healthy", methods=["GET"])
+def fake_healthy():
     return "OK", 200
 
 if __name__ == "__main__":
