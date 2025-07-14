@@ -53,6 +53,25 @@ def push_firmware():
         "results": results
     })
 
+@app.route("/verify", methods=["GET"])
+def verify_firmware():
+    pods = v1.list_namespaced_pod(namespace=NAMESPACE, label_selector=CAR_LABEL_SELECTOR)
+    results = {}
+
+    for pod in pods.items:
+        pod_ip = pod.status.pod_ip
+        if not pod_ip:
+            results[pod.metadata.name] = "No pod IP"
+            continue
+
+        url = f"http://{pod_ip}:{CAR_PORT}/status"
+        try:
+            r = requests.get(url, timeout=3)
+            results[pod.metadata.name] = r.json()
+        except Exception as e:
+            results[pod.metadata.name] = f"Failed: {str(e)}"
+
+    return jsonify(results)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8090)
-
