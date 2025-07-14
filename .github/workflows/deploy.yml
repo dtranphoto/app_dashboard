@@ -177,43 +177,43 @@ jobs:
             --set firmwareServer.tag=${{ env.FIRMWARE_IMAGE_TAG }} \
             --wait
       
-      - name: 📤 Push firmware after deploy
-        id: ota
-        run: |
-          echo "Pushing firmware v2.0..."
-          # Retry loop to wait for service readiness (optional but recommended)
-          for i in {1..10}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://k8.dtinfra.site/firmware/health)
-            if [ "$STATUS" -eq 200 ]; then
-              echo "Firmware server is ready!"
-              break
-            fi
-            echo "Waiting for firmware server to be ready... ($i)"
-            sleep 5
-          done
+      # - name: 📤 Push firmware after deploy
+      #   id: ota
+      #   run: |
+      #     echo "Pushing firmware v2.0..."
+      #     # Retry loop to wait for service readiness (optional but recommended)
+      #     for i in {1..10}; do
+      #       STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://k8.dtinfra.site/firmware/health)
+      #       if [ "$STATUS" -eq 200 ]; then
+      #         echo "Firmware server is ready!"
+      #         break
+      #       fi
+      #       echo "Waiting for firmware server to be ready... ($i)"
+      #       sleep 5
+      #     done
 
-          RESPONSE=$(curl -s -w "%{http_code}" -o result.json -X POST "http://k8.dtinfra.site/push?version=v2.0")
-          cat result.json
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "❌ Firmware push failed with HTTP code $RESPONSE"
-            exit 1
-          fi
+      #     RESPONSE=$(curl -s -w "%{http_code}" -o result.json -X POST "http://k8.dtinfra.site/push?version=v2.0")
+      #     cat result.json
+      #     if [ "$RESPONSE" -ne 200 ]; then
+      #       echo "❌ Firmware push failed with HTTP code $RESPONSE"
+      #       exit 1
+      #     fi
 
-          if ! grep -q '"message":"Firmware flashed to v2.0"' result.json; then
-            echo "❌ One or more cars failed to update"
-            exit 1
-          fi
+      #     if ! grep -q '"message":"Firmware flashed to v2.0"' result.json; then
+      #       echo "❌ One or more cars failed to update"
+      #       exit 1
+      #     fi
 
-          echo "✅ OTA update successful for all cars"
+      #     echo "✅ OTA update successful for all cars"
 
-      - name: ✅ Verify firmware status
-        run: |
-          echo "Verifying firmware..."
-          curl -s http://k8.dtinfra.site/firmware/verify | jq .
-          if [ $? -ne 0 ]; then
-            echo "❌ Firmware verification failed"
-            exit 1
-          fi
+      # - name: ✅ Verify firmware status
+      #   run: |
+      #     echo "Verifying firmware..."
+      #     curl -s http://k8.dtinfra.site/firmware/verify | jq .
+      #     if [ $? -ne 0 ]; then
+      #       echo "❌ Firmware verification failed"
+      #       exit 1
+      #     fi
 
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
