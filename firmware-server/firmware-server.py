@@ -53,7 +53,7 @@ def push_firmware():
         "results": results
     })
 
-@app.route("/verify", methods=["GET"])
+@app.route("/firmware/verify", methods=["GET"])
 def verify_firmware():
     print("🔍 [VERIFY] Starting firmware verification...")
 
