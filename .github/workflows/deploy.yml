@@ -181,7 +181,7 @@ jobs:
         id: ota
         run: |
           echo "Pushing firmware v2.0..."
-          RESPONSE=$(curl -s -w "%{http_code}" -o result.json -X POST "http://k8.dtinfra.site/firmware/push?version=v2.0")
+          RESPONSE=$(curl -s -w "%{http_code}" -o result.json -X POST "http://k8.dtinfra.site/push?version=v2.0")
           cat result.json
           if [ "$RESPONSE" -ne 200 ]; then
             echo "❌ Firmware push failed with HTTP code $RESPONSE"
@@ -203,7 +203,7 @@ jobs:
             echo "❌ Firmware verification failed"
             exit 1
           fi    
-          
+
       # - name: 📦 Set up Terraform
       #   uses: hashicorp/setup-terraform@v2
 
