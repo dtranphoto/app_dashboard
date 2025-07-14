@@ -41,7 +41,7 @@ def push_firmware():
             results[pod.metadata.name] = "No pod IP"
             continue
 
-        url = f"http://{pod_ip}:{CAR_PORT}/update"
+        url = f"http://{pod_ip}:{CAR_PORT}/update?version={version}"
         try:
             r = requests.post(url, data=firmware_data, timeout=3)
             results[pod.metadata.name] = r.json()
