@@ -2,11 +2,12 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY ./firmware-server.py .
-COPY ./requirements.txt .
-COPY ./firmware/ ./firmware/
+COPY firmware-server.py /app/firmware-server.py
+COPY requirements.txt /app/requirements.txt
+COPY firmware/ /app/firmware/
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-CMD ["python", "firmware-server.py"]
+CMD ["python", "/app/firmware-server.py"]
+
 
