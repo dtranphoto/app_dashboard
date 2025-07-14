@@ -55,23 +55,32 @@ def push_firmware():
 
 @app.route("/verify", methods=["GET"])
 def verify_firmware():
+    print("🔍 [VERIFY] Starting firmware verification...")
+
     pods = v1.list_namespaced_pod(namespace=NAMESPACE, label_selector=CAR_LABEL_SELECTOR)
     results = {}
 
     for pod in pods.items:
+        pod_name = pod.metadata.name
         pod_ip = pod.status.pod_ip
+
         if not pod_ip:
-            results[pod.metadata.name] = "No pod IP"
+            results[pod_name] = "No pod IP"
+            print(f"⚠️  [VERIFY] {pod_name}: No pod IP")
             continue
 
         url = f"http://{pod_ip}:{CAR_PORT}/status"
         try:
             r = requests.get(url, timeout=3)
-            results[pod.metadata.name] = r.json()
+            results[pod_name] = r.json()
+            print(f"✅ [VERIFY] {pod_name}: Firmware version {r.json().get('firmware_version')}")
         except Exception as e:
-            results[pod.metadata.name] = f"Failed: {str(e)}"
+            results[pod_name] = f"Failed: {str(e)}"
+            print(f"❌ [VERIFY] {pod_name}: Failed - {e}")
 
+    print("✅ [VERIFY] Done.\n")
     return jsonify(results)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8090)
