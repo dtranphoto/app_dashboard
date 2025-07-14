@@ -24,7 +24,7 @@ def push_firmware():
     if not version:
         return jsonify({"error": "Missing firmware version"}), 400
 
-    firmware_path = os.path.join(FIRMWARE_DIR, f"firmware_v{version}.bin")
+    firmware_path = os.path.join(FIRMWARE_DIR, f"firmware_{version}.bin")
 
     if not os.path.exists(firmware_path):
         return jsonify({"error": f"Firmware file not found: {firmware_path}"}), 404
