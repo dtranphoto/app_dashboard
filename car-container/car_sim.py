@@ -26,16 +26,21 @@ def status():
 def update():
     global firmware_version
 
-    # Save binary firmware to file
-    try:
-        firmware_data = request.data
-        if not firmware_data:
-            return jsonify({"error": "No firmware binary received"}), 400
+    # Get version from query param
+    new_version = request.args.get("version")
+    if not new_version:
+        return jsonify({"error": "No version specified"}), 400
 
+    # Save binary firmware to file
+    firmware_data = request.data
+    if not firmware_data:
+        return jsonify({"error": "No firmware binary received"}), 400
+
+    try:
         with open(FIRMWARE_PATH, "wb") as f:
             f.write(firmware_data)
 
-        firmware_version = "v2.0"  # or parse from metadata later
+        firmware_version = new_version
         return jsonify({"message": f"Firmware flashed to {firmware_version}"}), 200
 
     except Exception as e:
