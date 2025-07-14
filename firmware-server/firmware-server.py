@@ -18,7 +18,7 @@ CAR_LABEL_SELECTOR = "app=car"
 CAR_PORT = 8080
 FIRMWARE_DIR = "/app/firmware"
 
-@app.route("/firmware/push", methods=["POST"])
+@app.route("/push", methods=["POST"])
 def push_firmware():
     version = request.args.get("version")
     if not version:
