@@ -43,6 +43,7 @@ def push_firmware():
 
         url = f"http://{pod_ip}:{CAR_PORT}/update?version={version}"
         try:
+            print(f"[DEBUG] Pushing to {url}")
             r = requests.post(url, data=firmware_data, timeout=3)
             results[pod.metadata.name] = r.json()
         except Exception as e:
